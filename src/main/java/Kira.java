@@ -27,61 +27,76 @@ public class Kira {
         int taskCount = 0;
 
         while (true) {
-            command = in.nextLine();
+            try {
+                command = in.nextLine();
 
-            // COMMAND: bye
-            if (command.equals("bye")) {
-                break;
-            }
-
-            // COMMAND: list
-            else if (command.equals("list")) {
-                System.out.println(line);
-                System.out.println("Here are all your TASKS!");
-                for (int i = 0; i < taskCount; i++) {
-                    System.out.println(" " + (i + 1) + "." + tasks[i].toString());
+                // COMMAND: bye
+                if (command.equals("bye")) {
+                    break;
                 }
-                System.out.println(line);
-            }
 
-            // COMMAND: mark
-            else if (command.startsWith("mark")) {
-                String[] parts = command.split(" ");
-                int index = Integer.parseInt(parts[1]) - 1;
-                tasks[index].markAsDone();
-                System.out.println(line);
-                System.out.println(" Yay! Task marked as done:");
-                System.out.println("   " + tasks[index].toString());
-                System.out.println(line);
-            }
-
-            // COMMAND: unmark
-            else if (command.startsWith("unmark")) {
-                String[] parts = command.split(" ");
-                int index = Integer.parseInt(parts[1]) - 1;
-                tasks[index].markAsUndone();
-                System.out.println(line);
-                System.out.println(" Okay... got it, not done yet:");
-                System.out.println("   " + tasks[index].toString());
-                System.out.println(line);
-            }
-
-            // COMMAND: add task (todo/deadline/event)
-
-            else {
-                Task newTask = getTask(command);
-
-                if (newTask != null) {
-                    tasks[taskCount] = newTask;
-                    taskCount++;
-
+                // COMMAND: list
+                else if (command.equals("list")) {
                     System.out.println(line);
-                    System.out.println(" YAY! Task added:");
-                    System.out.println("   " + newTask);
-                    System.out.println(" Now you have " + taskCount + " TASKS in the list!");
-                    System.out.println(line);
+                    System.out.println("Here are all your TASKS!");
+                    for (int i = 0; i < taskCount; i++) {
+                        System.out.println(" " + (i + 1) + "." + tasks[i].toString());
+                    }
                 }
+
+                // COMMAND: mark
+                else if (command.startsWith("mark")) {
+                    String[] parts = command.split(" ");
+                    if (parts.length < 2) {
+                        throw new KiraException("OOPS! Please specify the task number.");
+                    }
+                    int index = Integer.parseInt(parts[1]) - 1;
+                    if (index < 0 || index >= taskCount) {
+                        throw new KiraException("OOPS! There doesn't seem to be a task " + parts[1] + "!");
+                    }
+                    tasks[index].markAsDone();
+                    System.out.println(line);
+                    System.out.println(" Yay! Task marked as done:");
+                    System.out.println("   " + tasks[index].toString());
+                }
+
+                // COMMAND: unmark
+                else if (command.startsWith("unmark")) {
+                    String[] parts = command.split(" ");
+                    if (parts.length < 2) {
+                        throw new KiraException("OOPS! Please specify the task number.");
+                    }
+                    int index = Integer.parseInt(parts[1]) - 1;
+                    if (index < 0 || index >= taskCount) {
+                        throw new KiraException("OOPS! There doesn't seem to be a task " + parts[1] + "!");
+                    }
+                    tasks[index].markAsUndone();
+                    System.out.println(line);
+                    System.out.println(" Okay... got it, not done yet:");
+                    System.out.println("   " + tasks[index].toString());
+                }
+
+                // COMMAND: add task (todo/deadline/event)
+                else {
+                    Task newTask = getTask(command);
+
+                    if (newTask != null) {
+                        tasks[taskCount] = newTask;
+                        taskCount++;
+
+                        System.out.println(line);
+                        System.out.println(" YAY! Task added:");
+                        System.out.println("   " + newTask);
+                        System.out.println(" Now you have " + taskCount + " TASKS in the list!");
+                    }
+                }
+            } catch (KiraException e) {
+                System.out.println(" " + e.getMessage());
+            } catch (NumberFormatException e) {
+                System.out.println(" OOPS! Please enter a valid number.");
             }
+
+            System.out.println(line);
         }
 
         // Exit
@@ -90,20 +105,40 @@ public class Kira {
         System.out.println(line);
     }
 
-    private static Task getTask(String command) {
+    private static Task getTask(String command) throws KiraException {
         Task newTask = null;
 
         if (command.startsWith("todo")) {
+            if (command.length() <= 5) {
+                throw new KiraException("OOPS! Please provide a todo description!");
+            }
             String description = command.substring(5);
             newTask = new ToDo(description);
         } else if (command.startsWith("deadline")) {
+            if (command.length() <= 9) {
+                throw new KiraException("OOPS! Please provide a deadline description!");
+            }
             String[] parts = command.substring(9).split(" /by ");
+            if (parts.length < 2) {
+                throw new KiraException("OOPS! Please add a deadline time (use /by).");
+            }
             newTask = new Deadline(parts[0], parts[1]);
         } else if (command.startsWith("event")) {
+            if (command.length() <= 6) {
+                throw new KiraException("OOPS! Please provide a deadline description!");
+            }
             String[] parts = command.substring(6).split(" /from ");
+            if (parts.length < 2) {
+                throw new KiraException("OOPS! Please add an event start time (use /from).");
+            }
             String description = parts[0];
             String[] timeParts = parts[1].split(" /to ");
+            if (timeParts.length < 2) {
+                throw new KiraException("OOPS! Please add an event end time (use /to).");
+            }
             newTask = new Event(description, timeParts[0], timeParts[1]);
+        } else {
+            throw new KiraException("Errr I'm afraid that's not a valid command...");
         }
 
         return newTask;
