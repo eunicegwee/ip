@@ -11,4 +11,6 @@ mark 1
 mark 100
 unmark 1
 unmark
+delete 2
+delete 100
 bye

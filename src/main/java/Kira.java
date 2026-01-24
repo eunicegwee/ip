@@ -76,6 +76,23 @@ public class Kira {
                     System.out.println("   " + tasks.get(index).toString());
                 }
 
+                // COMMAND: delete
+                else if (command.startsWith("delete")) {
+                    String[] parts = command.split(" ");
+                    if (parts.length < 2) {
+                        throw new KiraException("OOPS! Please specify the task number.");
+                    }
+                    int index = Integer.parseInt(parts[1]) - 1;
+                    if (index < 0 || index >= tasks.size()) {
+                        throw new KiraException("OOPS! There doesn't seem to be a task " + parts[1] + "!");
+                    }
+                    Task removedTask = tasks.remove(index);
+                    System.out.println(line);
+                    System.out.println(" Okay, got it! REMOVED:");
+                    System.out.println("   " + removedTask.toString());
+                    System.out.println(" Now you have " + tasks.size() + " TASKS in the list!");
+                }
+
                 // COMMAND: add task (todo/deadline/event)
                 else {
                     Task newTask = getTask(command);
