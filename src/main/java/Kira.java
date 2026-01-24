@@ -29,6 +29,7 @@ public class Kira {
         while (true) {
             command = in.nextLine();
 
+            // COMMAND: bye
             if (command.equals("bye")) {
                 break;
             }
@@ -47,9 +48,7 @@ public class Kira {
             else if (command.startsWith("mark")) {
                 String[] parts = command.split(" ");
                 int index = Integer.parseInt(parts[1]) - 1;
-
                 tasks[index].markAsDone();
-
                 System.out.println(line);
                 System.out.println(" Yay! Task marked as done:");
                 System.out.println("   " + tasks[index].toString());
@@ -57,26 +56,31 @@ public class Kira {
             }
 
             // COMMAND: unmark
-
             else if (command.startsWith("unmark")) {
                 String[] parts = command.split(" ");
                 int index = Integer.parseInt(parts[1]) - 1;
-
                 tasks[index].markAsUndone();
-
                 System.out.println(line);
                 System.out.println(" Okay... got it, not done yet:");
                 System.out.println("   " + tasks[index].toString());
                 System.out.println(line);
             }
 
-            else {
-                tasks[taskCount] = new Task(command);
-                taskCount++;
+            // COMMAND: add task (todo/deadline/event)
 
-                System.out.println(line);
-                System.out.println(" added: " + command);
-                System.out.println(line);
+            else {
+                Task newTask = getTask(command);
+
+                if (newTask != null) {
+                    tasks[taskCount] = newTask;
+                    taskCount++;
+
+                    System.out.println(line);
+                    System.out.println(" YAY! Task added:");
+                    System.out.println("   " + newTask);
+                    System.out.println(" Now you have " + taskCount + " TASKS in the list!");
+                    System.out.println(line);
+                }
             }
         }
 
@@ -84,5 +88,24 @@ public class Kira {
         System.out.println(line);
         System.out.println(" Adios. See you later!");
         System.out.println(line);
+    }
+
+    private static Task getTask(String command) {
+        Task newTask = null;
+
+        if (command.startsWith("todo")) {
+            String description = command.substring(5);
+            newTask = new ToDo(description);
+        } else if (command.startsWith("deadline")) {
+            String[] parts = command.substring(9).split(" /by ");
+            newTask = new Deadline(parts[0], parts[1]);
+        } else if (command.startsWith("event")) {
+            String[] parts = command.substring(6).split(" /from ");
+            String description = parts[0];
+            String[] timeParts = parts[1].split(" /to ");
+            newTask = new Event(description, timeParts[0], timeParts[1]);
+        }
+
+        return newTask;
     }
 }
