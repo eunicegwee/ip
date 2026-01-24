@@ -1,5 +1,4 @@
 public class Event extends Task {
-
     protected String from;
     protected String to;
 
@@ -7,6 +6,11 @@ public class Event extends Task {
         super(description);
         this.from = from;
         this.to = to;
+    }
+
+    @Override
+    public String toFileFormat() {
+        return "E | " + (isDone ? "1" : "0") + " | " + description + " | " + from + " | " + to;
     }
 
     @Override
