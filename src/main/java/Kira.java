@@ -19,21 +19,33 @@ public class Kira {
         System.out.println(" How can I help you today?");
         System.out.println(line);
 
-        // Initialize scanner
+        // Initialize scanner and tasks tracker
         Scanner in = new Scanner(System.in);
         String command;
+
+        Task[] tasks = new Task[100];
+        int taskCount = 0;
 
         while (true) {
             command = in.nextLine();
 
             if (command.equals("bye")) {
                 break;
-            }
+            } else if (command.equals("list")) {
+                System.out.println(line);
+                for (int i = 0; i < taskCount; i++) {
+                    // Uses the accessor methods from Task.java
+                    System.out.println(" " + (i + 1) + ". " + tasks[i].getDescription());
+                }
+                System.out.println(line);
+            } else {
+                tasks[taskCount] = new Task(command);
+                taskCount++;
 
-            // Echo the command
-            System.out.println(line);
-            System.out.println(" " + command);
-            System.out.println(line);
+                System.out.println(line);
+                System.out.println(" added: " + command);
+                System.out.println(line);
+            }
         }
 
         // Exit
