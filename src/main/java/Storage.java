@@ -16,7 +16,7 @@ public class Storage {
         File file = new File(filePath);
 
         if (!file.exists()) {
-            return tasks;
+            throw new KiraException("No data file found.");
         }
 
         try {

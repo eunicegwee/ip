@@ -2,6 +2,8 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Kira {
+    private static Storage storage;
+
     public static void main(String[] args) {
         String line = "____________________________________________________________";
         String logo = """
@@ -20,11 +22,21 @@ public class Kira {
         System.out.println(" How can I help you today?");
         System.out.println(line);
 
+        // Initialize storage
+        storage = new Storage("data/kira.txt");
+        ArrayList<Task> tasks;
+        try {
+            tasks = storage.load();
+            System.out.println(" Yay, loaded task history! You have " + tasks.size() + " tasks.");
+        } catch (KiraException e) {
+            System.out.println(" No previous data found. Starting fresh task list!");
+            tasks = new ArrayList<>();
+        }
+        System.out.println(line);
+
         // Initialize scanner and tasks tracker
         Scanner in = new Scanner(System.in);
         String userInput;
-
-        ArrayList<Task> tasks = new ArrayList<>();
 
         while (true) {
             try {
@@ -48,6 +60,7 @@ public class Kira {
                     case MARK:
                         int markIndex = getIndex(userInput, tasks);
                         tasks.get(markIndex).markAsDone();
+                        storage.save(tasks);
                         System.out.println(" Yay! Task marked as done:");
                         System.out.println("   " + tasks.get(markIndex).toString());
                         break;
@@ -55,6 +68,7 @@ public class Kira {
                     case UNMARK:
                         int unmarkIndex = getIndex(userInput, tasks);
                         tasks.get(unmarkIndex).markAsUndone();
+                        storage.save(tasks);
                         System.out.println(" Okay... got it, not done yet:");
                         System.out.println("   " + tasks.get(unmarkIndex).toString());
                         break;
@@ -62,6 +76,7 @@ public class Kira {
                     case DELETE:
                         int deleteIndex = getIndex(userInput, tasks);
                         Task removedTask = tasks.remove(deleteIndex);
+                        storage.save(tasks);
                         System.out.println(" Okay, got it! REMOVED:");
                         System.out.println("   " + removedTask.toString());
                         System.out.println(" Now you have " + tasks.size() + " TASKS in the list!");
@@ -72,7 +87,7 @@ public class Kira {
                     case EVENT:
                         Task newTask = getTask(command, userInput);
                         tasks.add(newTask);
-
+                        storage.save(tasks);
                         System.out.println(" YAY! Task added:");
                         System.out.println("   " + newTask);
                         System.out.println(" Now you have " + tasks.size() + " TASKS in the list!");
