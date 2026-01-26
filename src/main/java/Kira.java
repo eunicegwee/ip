@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.time.format.DateTimeParseException;
 
 public class Kira {
     private static Storage storage;
@@ -100,6 +101,8 @@ public class Kira {
                 System.out.println(" " + e.getMessage());
             } catch (NumberFormatException e) {
                 System.out.println(" OOPS! Please enter a valid number.");
+            } catch (DateTimeParseException e) {
+                System.out.println(" OOPS! Please enter a valid date: use yyyy-MM-dd HH:mm (e.g., 2025-01-30 18:00)");
             }
 
             System.out.println(line);
