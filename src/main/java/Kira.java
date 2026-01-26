@@ -1,6 +1,7 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.time.format.DateTimeParseException;
+import java.time.LocalDate;
 
 public class Kira {
     private static Storage storage;
@@ -92,6 +93,39 @@ public class Kira {
                         System.out.println(" YAY! Task added:");
                         System.out.println("   " + newTask);
                         System.out.println(" Now you have " + tasks.size() + " TASKS in the list!");
+                        break;
+
+                    case FILTER:
+                        if (userInput.length() <= 7) {
+                            throw new KiraException("Error: Please specify a date (e.g., filter 2025-01-30).");
+                        }
+                        String dateString = userInput.substring(7);
+                        LocalDate targetDate = LocalDate.parse(dateString);
+
+                        System.out.println(" DEADLINES AND/OR EVENTS HAPPENING ON " + targetDate.format(java.time.format.DateTimeFormatter.ofPattern("MMM d yyyy")) + ":");
+
+                        int count = 0;
+                        for (Task t : tasks) {
+                            if (t instanceof Deadline) {
+                                LocalDate dDate = ((Deadline) t).by.toLocalDate();
+                                if (dDate.equals(targetDate)) {
+                                    System.out.println("   " + t);
+                                    count++;
+                                }
+                            } else if (t instanceof Event) {
+                                LocalDate fromDate = ((Event) t).from.toLocalDate();
+                                LocalDate toDate = ((Event) t).to.toLocalDate();
+
+                                if (!targetDate.isBefore(fromDate) && !targetDate.isAfter(toDate)) {
+                                    System.out.println("   " + t);
+                                    count++;
+                                }
+                            }
+                        }
+
+                        if (count == 0) {
+                            System.out.println("   (Seems like you're free that day!)");
+                        }
                         break;
 
                     default:

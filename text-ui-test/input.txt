@@ -1,13 +1,15 @@
 list
 todo read book
-deadline return book /by 2025-10-15 18:00
+deadline return book /by 2025-05-01 18:00
 deadline wrong /by Sunday
-event project meeting /from Mon 2pm /to 4pm
+event camp /from 2025-05-01 08:00 /to 2025-05-03 12:00
 todo
 deadline return book
 event project meeting /from Mon 2pm
 blah
 list
+filter 2025-05-01
+filter 2025-05-02
 mark 1
 mark 100
 unmark 1

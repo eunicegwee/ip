@@ -7,5 +7,6 @@ public enum Command {
     DEADLINE,
     EVENT,
     DELETE,
+    FILTER,
     UNKNOWN
 }
