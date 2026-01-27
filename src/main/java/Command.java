@@ -1,12 +1,7 @@
-public enum Command {
-    BYE,
-    LIST,
-    MARK,
-    UNMARK,
-    TODO,
-    DEADLINE,
-    EVENT,
-    DELETE,
-    FILTER,
-    UNKNOWN
+public abstract class Command {
+    public abstract void execute(TaskList tasks, Ui ui, Storage storage) throws KiraException;
+
+    public boolean isExit() {
+        return false;
+    }
 }
