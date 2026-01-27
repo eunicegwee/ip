@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Handles loading tasks from the file and saving tasks back to the file.
+ */
 public class Storage {
     private String filePath;
 
@@ -15,6 +18,11 @@ public class Storage {
         this.filePath = filePath;
     }
 
+    /**
+     * Loads tasks from the storage file.
+     * @return An ArrayList of Tasks loaded from the file.
+     * @throws KiraException If the file format is corrupted or cannot be read.
+     */
     public ArrayList<Task> load() throws KiraException {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
@@ -51,6 +59,10 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * Saves the current list of tasks to the storage file.
+     * @param tasks The TaskList containing tasks to save.
+     */
     public void save(TaskList tasks) {
         try {
             File file = new File(filePath);

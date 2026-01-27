@@ -8,8 +8,17 @@ import kira.task.ToDo;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Parses user input into executable Command objects.
+ */
 public class Parser {
 
+    /**
+     * Parses the full user command and returns the corresponding Command object.
+     * @param fullCommand The full string input by the user.
+     * @return A Command object corresponding to the user's intent.
+     * @throws KiraException If the command is unknown or the format is invalid.
+     */
     public static Command parse(String fullCommand) throws KiraException {
         String[] parts = fullCommand.split(" ", 2); // Split command word and arguments
         String commandWord = parts[0].toLowerCase();

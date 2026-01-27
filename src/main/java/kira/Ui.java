@@ -2,6 +2,9 @@ package kira;
 
 import java.util.Scanner;
 
+/**
+ * Handles all user interactions, including reading input and printing messages to the console.
+ */
 public class Ui {
     private final Scanner in;
 
@@ -9,10 +12,17 @@ public class Ui {
         this.in = new Scanner(System.in);
     }
 
+    /**
+     * Reads the next line of input from the user.
+     * @return The user's full command string.
+     */
     public String readCommand() {
         return in.nextLine();
     }
 
+    /**
+     * Displays the welcome message and logo.
+     */
     public void showWelcome() {
         String logo = """
                     __ __  _           \s
@@ -28,18 +38,32 @@ public class Ui {
         showLine();
     }
 
+    /**
+     * Prints a horizontal divider line.
+     */
     public void showLine() {
         System.out.println("____________________________________________________________");
     }
 
+    /**
+     * Displays an error message to the user.
+     * @param message The error message to display.
+     */
     public void showError(String message) {
         System.out.println(" " + message);
     }
 
+    /**
+     * Displays an error when loading the file fails.
+     */
     public void showLoadingError() {
         System.out.println(" No previous data found. Starting fresh task list!");
     }
 
+    /**
+     * Displays a generic message to the user.
+     * @param message The message to display.
+     */
     public void showMessage(String message) {
         System.out.println(" " + message);
     }
