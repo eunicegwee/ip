@@ -1,0 +1,19 @@
+package kira.task;  // Same package as the class we are testing
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class ToDoTest {
+
+    @Test
+    public void toString_validInput_success() {
+        ToDo todo = new ToDo("read book");
+        assertEquals("[T][ ] read book", todo.toString());
+    }
+
+    @Test
+    public void toFileFormat_validInput_success() {
+        ToDo todo = new ToDo("read book");
+        assertEquals("T | 0 | read book", todo.toFileFormat());
+    }
+}
