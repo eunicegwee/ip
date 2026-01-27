@@ -4,58 +4,42 @@ import java.time.format.DateTimeParseException;
 import java.time.LocalDate;
 
 public class Kira {
-    private static Storage storage;
+    private Storage storage;
+    private ArrayList<Task> tasks;
+    private Ui ui;
 
-    public static void main(String[] args) {
-        String line = "____________________________________________________________";
-        String logo = """
-                    __ __  _           \s
-                   / //_/ (_)_________ \s
-                  / ,<   / / ___/ __ \\\s
-                 / /| | / / /  / /_/ /\s
-                /_/ |_|/_/_|   \\__,_/ \s
-                """;
-
-        System.out.println("Hello from\n" + logo);
-
-        // Greeting
-        System.out.println(line);
-        System.out.println(" Hello! I'm Kira!");
-        System.out.println(" How can I help you today?");
-        System.out.println(line);
-
-        // Initialize storage
-        storage = new Storage("data/kira.txt");
-        ArrayList<Task> tasks;
+    public Kira(String filePath) {
+        this.ui = new Ui();
+        this.storage = new Storage(filePath);
         try {
-            tasks = storage.load();
-            System.out.println(" Yay, loaded task history! You have " + tasks.size() + " tasks.");
+            this.tasks = storage.load();
         } catch (KiraException e) {
-            System.out.println(" No previous data found. Starting fresh task list!");
-            tasks = new ArrayList<>();
+            ui.showLoadingError();
+            this.tasks = new ArrayList<>();
         }
-        System.out.println(line);
+    }
 
-        // Initialize scanner and tasks tracker
-        Scanner in = new Scanner(System.in);
-        String userInput;
+    public void run() {
+        ui.showWelcome();
+        boolean isExit = false;
 
-        while (true) {
+        while (!isExit) {
             try {
-                userInput = in.nextLine();
-                System.out.println(line);
+                String userInput = ui.readCommand();
+                ui.showLine();
+
                 Command command = parseCommand(userInput);
 
                 switch (command) {
                     case BYE:
-                        System.out.println(" Adios. See you later!");
-                        System.out.println(line);
+                        ui.showMessage(" Adios. See you later!");
+                        ui.showLine();
                         return;
 
                     case LIST:
-                        System.out.println("Here are all your TASKS!");
+                        ui.showMessage("Here are all your TASKS!");
                         for (int i = 0; i < tasks.size(); i++) {
-                            System.out.println(" " + (i + 1) + "." + tasks.get(i).toString());
+                            ui.showMessage(" " + (i + 1) + "." + tasks.get(i).toString());
                         }
                         break;
 
@@ -63,25 +47,25 @@ public class Kira {
                         int markIndex = getIndex(userInput, tasks);
                         tasks.get(markIndex).markAsDone();
                         storage.save(tasks);
-                        System.out.println(" Yay! Task marked as done:");
-                        System.out.println("   " + tasks.get(markIndex).toString());
+                        ui.showMessage(" Yay! Task marked as done:");
+                        ui.showMessage("   " + tasks.get(markIndex).toString());
                         break;
 
                     case UNMARK:
                         int unmarkIndex = getIndex(userInput, tasks);
                         tasks.get(unmarkIndex).markAsUndone();
                         storage.save(tasks);
-                        System.out.println(" Okay... got it, not done yet:");
-                        System.out.println("   " + tasks.get(unmarkIndex).toString());
+                        ui.showMessage(" Okay... got it, not done yet:");
+                        ui.showMessage("   " + tasks.get(unmarkIndex).toString());
                         break;
 
                     case DELETE:
                         int deleteIndex = getIndex(userInput, tasks);
                         Task removedTask = tasks.remove(deleteIndex);
                         storage.save(tasks);
-                        System.out.println(" Okay, got it! REMOVED:");
-                        System.out.println("   " + removedTask.toString());
-                        System.out.println(" Now you have " + tasks.size() + " TASKS in the list!");
+                        ui.showMessage(" Okay, got it! REMOVED:");
+                        ui.showMessage("   " + removedTask.toString());
+                        ui.showMessage(" Now you have " + tasks.size() + " TASKS in the list!");
                         break;
 
                     case TODO:
@@ -90,9 +74,9 @@ public class Kira {
                         Task newTask = getTask(command, userInput);
                         tasks.add(newTask);
                         storage.save(tasks);
-                        System.out.println(" YAY! Task added:");
-                        System.out.println("   " + newTask);
-                        System.out.println(" Now you have " + tasks.size() + " TASKS in the list!");
+                        ui.showMessage(" YAY! Task added:");
+                        ui.showMessage("   " + newTask);
+                        ui.showMessage(" Now you have " + tasks.size() + " TASKS in the list!");
                         break;
 
                     case FILTER:
@@ -102,14 +86,14 @@ public class Kira {
                         String dateString = userInput.substring(7);
                         LocalDate targetDate = LocalDate.parse(dateString);
 
-                        System.out.println(" DEADLINES AND/OR EVENTS HAPPENING ON " + targetDate.format(java.time.format.DateTimeFormatter.ofPattern("MMM d yyyy")) + ":");
+                        ui.showMessage(" DEADLINES AND/OR EVENTS HAPPENING ON " + targetDate.format(java.time.format.DateTimeFormatter.ofPattern("MMM d yyyy")) + ":");
 
                         int count = 0;
                         for (Task t : tasks) {
                             if (t instanceof Deadline) {
                                 LocalDate dDate = ((Deadline) t).by.toLocalDate();
                                 if (dDate.equals(targetDate)) {
-                                    System.out.println("   " + t);
+                                    ui.showMessage("   " + t);
                                     count++;
                                 }
                             } else if (t instanceof Event) {
@@ -117,14 +101,14 @@ public class Kira {
                                 LocalDate toDate = ((Event) t).to.toLocalDate();
 
                                 if (!targetDate.isBefore(fromDate) && !targetDate.isAfter(toDate)) {
-                                    System.out.println("   " + t);
+                                    ui.showMessage("   " + t);
                                     count++;
                                 }
                             }
                         }
 
                         if (count == 0) {
-                            System.out.println("   (Seems like you're free that day!)");
+                            ui.showMessage("   (Seems like you're free that day!)");
                         }
                         break;
 
@@ -132,18 +116,22 @@ public class Kira {
                         throw new KiraException("Errr I'm afraid that's not a valid command...");
                 }
             } catch (KiraException e) {
-                System.out.println(" " + e.getMessage());
+                ui.showError(" " + e.getMessage());
             } catch (NumberFormatException e) {
-                System.out.println(" OOPS! Please enter a valid number.");
+                ui.showError(" OOPS! Please enter a valid number.");
             } catch (DateTimeParseException e) {
-                System.out.println(" OOPS! Please enter a valid date: use yyyy-MM-dd HH:mm (e.g., 2025-01-30 18:00)");
+                ui.showError(" OOPS! Please enter a valid date: use yyyy-MM-dd HH:mm (e.g., 2025-01-30 18:00)");
             }
 
-            System.out.println(line);
+            ui.showLine();
         }
     }
 
-    private static int getIndex(String userInput, ArrayList<Task> tasks) throws KiraException {
+    public static void main(String[] args) {
+        new Kira("data/kira.txt").run();
+    }
+
+    private int getIndex(String userInput, ArrayList<Task> tasks) throws KiraException {
         String[] markParts = userInput.split(" ");
         if (markParts.length < 2) {
             throw new KiraException("OOPS! Please specify the task number.");
@@ -155,7 +143,7 @@ public class Kira {
         return markIndex;
     }
 
-    private static Command parseCommand(String userInput) {
+    private Command parseCommand(String userInput) {
         String firstWord = userInput.split(" ")[0].toUpperCase();
         try {
             return Command.valueOf(firstWord);
@@ -164,7 +152,7 @@ public class Kira {
         }
     }
 
-    private static Task getTask(Command type, String command) throws KiraException {
+    private Task getTask(Command type, String command) throws KiraException {
         switch (type) {
             case TODO:
                 if (command.length() <= 5) {

@@ -1,3 +1,4 @@
+ No previous data found. Starting fresh task list!
 Hello from
     __ __  _            
    / //_/ (_)_________  
@@ -6,86 +7,84 @@ Hello from
 /_/ |_|/_/_|   \__,_/  
 
 ____________________________________________________________
- Hello! I'm Kira!
+ Hello! I'm Kira.
  How can I help you today?
 ____________________________________________________________
- No previous data found. Starting fresh task list!
+____________________________________________________________
+ Here are all your TASKS!
 ____________________________________________________________
 ____________________________________________________________
-Here are all your TASKS!
+  YAY! Task added:
+    [T][ ] read book
+  Now you have 1 TASKS in the list!
 ____________________________________________________________
 ____________________________________________________________
- YAY! Task added:
-   [T][ ] read book
- Now you have 1 TASKS in the list!
+  YAY! Task added:
+    [D][ ] return book (by: May 1 2025 18:00)
+  Now you have 2 TASKS in the list!
 ____________________________________________________________
 ____________________________________________________________
- YAY! Task added:
-   [D][ ] return book (by: May 1 2025 18:00)
- Now you have 2 TASKS in the list!
+  OOPS! Please enter a valid date: use yyyy-MM-dd HH:mm (e.g., 2025-01-30 18:00)
 ____________________________________________________________
 ____________________________________________________________
- OOPS! Please enter a valid date: use yyyy-MM-dd HH:mm (e.g., 2025-01-30 18:00)
+  YAY! Task added:
+    [E][ ] camp (from: May 1 2025 08:00 to: May 3 2025 12:00)
+  Now you have 3 TASKS in the list!
 ____________________________________________________________
 ____________________________________________________________
- YAY! Task added:
-   [E][ ] camp (from: May 1 2025 08:00 to: May 3 2025 12:00)
- Now you have 3 TASKS in the list!
+  OOPS! Please provide a todo description!
 ____________________________________________________________
 ____________________________________________________________
- OOPS! Please provide a todo description!
+  OOPS! Please add a deadline time (use /by).
 ____________________________________________________________
 ____________________________________________________________
- OOPS! Please add a deadline time (use /by).
+  OOPS! Please add an event end time (use /to).
 ____________________________________________________________
 ____________________________________________________________
- OOPS! Please add an event end time (use /to).
+  Errr I'm afraid that's not a valid command...
 ____________________________________________________________
 ____________________________________________________________
- Errr I'm afraid that's not a valid command...
+ Here are all your TASKS!
+  1.[T][ ] read book
+  2.[D][ ] return book (by: May 1 2025 18:00)
+  3.[E][ ] camp (from: May 1 2025 08:00 to: May 3 2025 12:00)
 ____________________________________________________________
 ____________________________________________________________
-Here are all your TASKS!
- 1.[T][ ] read book
- 2.[D][ ] return book (by: May 1 2025 18:00)
- 3.[E][ ] camp (from: May 1 2025 08:00 to: May 3 2025 12:00)
+  DEADLINES AND/OR EVENTS HAPPENING ON May 1 2025:
+    [D][ ] return book (by: May 1 2025 18:00)
+    [E][ ] camp (from: May 1 2025 08:00 to: May 3 2025 12:00)
 ____________________________________________________________
 ____________________________________________________________
- DEADLINES AND/OR EVENTS HAPPENING ON May 1 2025:
-   [D][ ] return book (by: May 1 2025 18:00)
-   [E][ ] camp (from: May 1 2025 08:00 to: May 3 2025 12:00)
+  DEADLINES AND/OR EVENTS HAPPENING ON May 2 2025:
+    [E][ ] camp (from: May 1 2025 08:00 to: May 3 2025 12:00)
 ____________________________________________________________
 ____________________________________________________________
- DEADLINES AND/OR EVENTS HAPPENING ON May 2 2025:
-   [E][ ] camp (from: May 1 2025 08:00 to: May 3 2025 12:00)
+  Yay! Task marked as done:
+    [T][X] read book
 ____________________________________________________________
 ____________________________________________________________
- Yay! Task marked as done:
-   [T][X] read book
+  OOPS! There doesn't seem to be a task 100!
 ____________________________________________________________
 ____________________________________________________________
- OOPS! There doesn't seem to be a task 100!
+  Okay... got it, not done yet:
+    [T][ ] read book
 ____________________________________________________________
 ____________________________________________________________
- Okay... got it, not done yet:
-   [T][ ] read book
+  OOPS! Please specify the task number.
 ____________________________________________________________
 ____________________________________________________________
- OOPS! Please specify the task number.
+  Okay, got it! REMOVED:
+    [D][ ] return book (by: May 1 2025 18:00)
+  Now you have 2 TASKS in the list!
 ____________________________________________________________
 ____________________________________________________________
- Okay, got it! REMOVED:
-   [D][ ] return book (by: May 1 2025 18:00)
- Now you have 2 TASKS in the list!
+  OOPS! There doesn't seem to be a task 100!
 ____________________________________________________________
 ____________________________________________________________
- OOPS! There doesn't seem to be a task 100!
+ Here are all your TASKS!
+  1.[T][ ] read book
+  2.[E][ ] camp (from: May 1 2025 08:00 to: May 3 2025 12:00)
 ____________________________________________________________
 ____________________________________________________________
-Here are all your TASKS!
- 1.[T][ ] read book
- 2.[E][ ] camp (from: May 1 2025 08:00 to: May 3 2025 12:00)
-____________________________________________________________
-____________________________________________________________
- Adios. See you later!
+  Adios. See you later!
 ____________________________________________________________
