@@ -5,17 +5,17 @@ import java.time.LocalDate;
 
 public class Kira {
     private Storage storage;
-    private ArrayList<Task> tasks;
+    private TaskList tasks;
     private Ui ui;
 
     public Kira(String filePath) {
         this.ui = new Ui();
         this.storage = new Storage(filePath);
         try {
-            this.tasks = storage.load();
+            tasks = new TaskList(storage.load());
         } catch (KiraException e) {
             ui.showLoadingError();
-            this.tasks = new ArrayList<>();
+            tasks = new TaskList();
         }
     }
 
@@ -33,8 +33,8 @@ public class Kira {
                 switch (command) {
                     case BYE:
                         ui.showMessage(" Adios. See you later!");
-                        ui.showLine();
-                        return;
+                        isExit = true;
+                        break;
 
                     case LIST:
                         ui.showMessage("Here are all your TASKS!");
@@ -61,7 +61,7 @@ public class Kira {
 
                     case DELETE:
                         int deleteIndex = getIndex(userInput, tasks);
-                        Task removedTask = tasks.remove(deleteIndex);
+                        Task removedTask = tasks.delete(deleteIndex);
                         storage.save(tasks);
                         ui.showMessage(" Okay, got it! REMOVED:");
                         ui.showMessage("   " + removedTask.toString());
@@ -89,7 +89,7 @@ public class Kira {
                         ui.showMessage(" DEADLINES AND/OR EVENTS HAPPENING ON " + targetDate.format(java.time.format.DateTimeFormatter.ofPattern("MMM d yyyy")) + ":");
 
                         int count = 0;
-                        for (Task t : tasks) {
+                        for (Task t : tasks.getAll()) {
                             if (t instanceof Deadline) {
                                 LocalDate dDate = ((Deadline) t).by.toLocalDate();
                                 if (dDate.equals(targetDate)) {
@@ -131,7 +131,7 @@ public class Kira {
         new Kira("data/kira.txt").run();
     }
 
-    private int getIndex(String userInput, ArrayList<Task> tasks) throws KiraException {
+    private int getIndex(String userInput, TaskList tasks) throws KiraException {
         String[] markParts = userInput.split(" ");
         if (markParts.length < 2) {
             throw new KiraException("OOPS! Please specify the task number.");

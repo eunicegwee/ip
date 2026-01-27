@@ -47,13 +47,13 @@ public class Storage {
         return tasks;
     }
 
-    public void save(ArrayList<Task> tasks) {
+    public void save(TaskList tasks) {
         try {
             File file = new File(filePath);
             file.getParentFile().mkdirs();
 
             FileWriter fw = new FileWriter(filePath);
-            for (Task task : tasks) {
+            for (Task task : tasks.getAll()) {
                 fw.write(task.toFileFormat() + System.lineSeparator());
             }
             fw.close();
