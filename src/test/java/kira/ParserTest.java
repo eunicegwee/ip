@@ -71,4 +71,17 @@ public class ParserTest {
         });
         assertEquals("OOPS! That is not a valid number.", e.getMessage());
     }
+
+    @Test
+    public void parse_findCommand_returnsFindCommand() throws Exception {
+        assertTrue(Parser.parse("find book") instanceof FindCommand);
+    }
+
+    @Test
+    public void parse_findMissingKeyword_throwsException() {
+        Exception e = assertThrows(KiraException.class, () -> {
+            Parser.parse("find");
+        });
+        assertEquals("OOPS! Please specify a search keyword.", e.getMessage());
+    }
 }

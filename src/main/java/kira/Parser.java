@@ -10,6 +10,7 @@ import kira.command.ExitCommand;
 import kira.command.FilterCommand;
 import kira.command.ListCommand;
 import kira.command.MarkCommand;
+import kira.command.FindCommand;
 import kira.task.Deadline;
 import kira.task.Event;
 import kira.task.ToDo;
@@ -35,6 +36,10 @@ public class Parser {
             case "mark" -> new MarkCommand(parseIndex(parts), true); // true = mark
             case "unmark" -> new MarkCommand(parseIndex(parts), false); // false = unmark
             case "delete" -> new DeleteCommand(parseIndex(parts));
+            case "find" -> {
+                if (parts.length < 2) throw new KiraException("OOPS! Please specify a search keyword.");
+                yield new FindCommand(parts[1]);
+            }
             case "todo" -> {
                 if (parts.length < 2) throw new KiraException("OOPS! The description of a todo cannot be empty.");
                 yield new AddCommand(new ToDo(parts[1]));
