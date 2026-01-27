@@ -1,3 +1,9 @@
+package kira.command;
+
+import kira.*;
+import kira.task.Task;
+import kira.task.TaskList;
+
 public class DeleteCommand extends Command {
     private final int index;
 

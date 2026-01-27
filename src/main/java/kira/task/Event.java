@@ -1,3 +1,5 @@
+package kira.task;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -11,6 +13,14 @@ public class Event extends Task {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         this.from = LocalDateTime.parse(from, formatter);
         this.to = LocalDateTime.parse(to, formatter);
+    }
+
+    public LocalDateTime getFrom() {
+        return this.from;
+    }
+
+    public LocalDateTime getTo() {
+        return this.to;
     }
 
     @Override

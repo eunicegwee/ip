@@ -1,4 +1,4 @@
-# Kira User Guide
+# kira.Kira User Guide
 
 // Update the title above to match the actual product name
 

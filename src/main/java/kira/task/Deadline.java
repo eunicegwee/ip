@@ -1,3 +1,5 @@
+package kira.task;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -8,6 +10,10 @@ public class Deadline extends Task {
     public Deadline(String description, String by) {
         super(description);
         this.by = LocalDateTime.parse(by, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+
+    public LocalDateTime getBy() {
+        return this.by;
     }
 
     @Override

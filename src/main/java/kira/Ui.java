@@ -1,3 +1,5 @@
+package kira;
+
 import java.util.Scanner;
 
 public class Ui {
@@ -21,7 +23,7 @@ public class Ui {
                 """;
         System.out.println("Hello from\n" + logo);
         showLine();
-        System.out.println(" Hello! I'm Kira.");
+        System.out.println(" Hello! I'm kira.Kira.");
         System.out.println(" How can I help you today?");
         showLine();
     }

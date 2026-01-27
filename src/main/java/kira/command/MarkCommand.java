@@ -1,3 +1,9 @@
+package kira.command;
+
+import kira.*;
+import kira.task.Task;
+import kira.task.TaskList;
+
 public class MarkCommand extends Command {
     private final int index;
     private final boolean isDone; // true for mark, false for unmark
@@ -16,7 +22,7 @@ public class MarkCommand extends Command {
         Task task = tasks.get(index);
         if (isDone) {
             task.markAsDone();
-            ui.showMessage(" Yay! Task marked as done:");
+            ui.showMessage(" Yay! kira.task.Task marked as done:");
         } else {
             task.markAsUndone();
             ui.showMessage(" Okay... got it, not done yet:");

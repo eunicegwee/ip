@@ -1,3 +1,12 @@
+package kira.command;
+
+import kira.Storage;
+import kira.task.Task;
+import kira.task.TaskList;
+import kira.Ui;
+import kira.task.Deadline;
+import kira.task.Event;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -17,14 +26,14 @@ public class FilterCommand extends Command {
         // Access the raw list using tasks.getAll()
         for (Task t : tasks.getAll()) {
             if (t instanceof Deadline) {
-                LocalDate dDate = ((Deadline) t).by.toLocalDate();
+                LocalDate dDate = ((Deadline) t).getBy().toLocalDate();
                 if (dDate.equals(targetDate)) {
                     ui.showMessage("   " + t);
                     count++;
                 }
             } else if (t instanceof Event) {
-                LocalDate fromDate = ((Event) t).from.toLocalDate();
-                LocalDate toDate = ((Event) t).to.toLocalDate();
+                LocalDate fromDate = ((Event) t).getFrom().toLocalDate();
+                LocalDate toDate = ((Event) t).getTo().toLocalDate();
 
                 if (!targetDate.isBefore(fromDate) && !targetDate.isAfter(toDate)) {
                     ui.showMessage("   " + t);

@@ -1,3 +1,10 @@
+package kira;
+
+import kira.command.*;
+import kira.task.Deadline;
+import kira.task.Event;
+import kira.task.ToDo;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 

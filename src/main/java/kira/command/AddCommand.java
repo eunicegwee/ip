@@ -1,3 +1,10 @@
+package kira.command;
+
+import kira.Storage;
+import kira.task.Task;
+import kira.task.TaskList;
+import kira.Ui;
+
 public class AddCommand extends Command {
     private final Task task;
 
@@ -9,7 +16,7 @@ public class AddCommand extends Command {
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         tasks.add(task);
         storage.save(tasks);
-        ui.showMessage(" YAY! Task added:");
+        ui.showMessage(" YAY! kira.task.Task added:");
         ui.showMessage("   " + task);
         ui.showMessage(" Now you have " + tasks.size() + " TASKS in the list!");
     }
