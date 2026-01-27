@@ -10,6 +10,7 @@ public abstract class Task {
 
     /**
      * Constructs a new Task.
+     *
      * @param description The description of the task.
      */
     public Task(String description) {
@@ -31,6 +32,7 @@ public abstract class Task {
 
     /**
      * Returns the formatted string for file storage.
+     *
      * @return A string representation suitable for saving to disk.
      */
     public abstract String toFileFormat();

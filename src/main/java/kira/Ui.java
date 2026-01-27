@@ -6,6 +6,7 @@ import java.util.Scanner;
  * Handles all user interactions, including reading input and printing messages to the console.
  */
 public class Ui {
+    private static final String LINE = "____________________________________________________________";
     private final Scanner in;
 
     public Ui() {
@@ -42,7 +43,7 @@ public class Ui {
      * Prints a horizontal divider line.
      */
     public void showLine() {
-        System.out.println("____________________________________________________________");
+        System.out.println(LINE);
     }
 
     /**

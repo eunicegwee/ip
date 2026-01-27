@@ -1,12 +1,16 @@
 package kira;
 
-import kira.task.*;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import kira.task.Deadline;
+import kira.task.Event;
+import kira.task.Task;
+import kira.task.TaskList;
+import kira.task.ToDo;
 
 /**
  * Handles loading tasks from the file and saving tasks back to the file.
