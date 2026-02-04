@@ -3,11 +3,21 @@ package kira.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents an event with a start and end datetime.
+ */
 public class Event extends Task {
 
     protected LocalDateTime from;
     protected LocalDateTime to;
 
+    /**
+     * Constructs an Event with the given description, start and end datetimes.
+     *
+     * @param description event description
+     * @param from start datetime in format yyyy-MM-dd HH:mm
+     * @param to end datetime in format yyyy-MM-dd HH:mm
+     */
     public Event(String description, String from, String to) {
         super(description);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -15,10 +25,16 @@ public class Event extends Task {
         this.to = LocalDateTime.parse(to, formatter);
     }
 
+    /**
+     * Returns the start datetime of the event.
+     */
     public LocalDateTime getFrom() {
         return this.from;
     }
 
+    /**
+     * Returns the end datetime of the event.
+     */
     public LocalDateTime getTo() {
         return this.to;
     }
@@ -37,3 +53,5 @@ public class Event extends Task {
                 + " to: " + to.format(formatter) + ")";
     }
 }
+
+// End of Event.java

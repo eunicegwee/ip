@@ -42,3 +42,6 @@ public abstract class Task {
         return "[" + getStatusIcon() + "] " + description;
     }
 }
+
+// End of Task.java
+

@@ -1,9 +1,14 @@
 package kira.command;
 
-import kira.*;
+import kira.KiraException;
+import kira.Storage;
+import kira.Ui;
 import kira.task.Task;
 import kira.task.TaskList;
 
+/**
+ * Deletes a task from the task list by index.
+ */
 public class DeleteCommand extends Command {
     private final int index;
 
@@ -23,3 +28,5 @@ public class DeleteCommand extends Command {
         ui.showMessage(" Now you have " + tasks.size() + " TASKS in the list!");
     }
 }
+
+// End of DeleteCommand.java

@@ -45,15 +45,22 @@ public class Storage {
                 boolean isDone = parts[1].equals("1");
                 String description = parts[2];
 
-                Task task = switch (type) {
-                    case "T" -> new ToDo(description);
-                    case "D" -> new Deadline(description, parts[3]);
-                    case "E" -> new Event(description, parts[3], parts[4]);
-                    default -> null;
-                };
+                Task task = null;
+                // Use if/else instead of switch to satisfy indentation rules
+                if ("T".equals(type)) {
+                    task = new ToDo(description);
+                } else if ("D".equals(type)) {
+                    task = new Deadline(description, parts[3]);
+                } else if ("E".equals(type)) {
+                    task = new Event(description, parts[3], parts[4]);
+                } else {
+                    task = null;
+                }
 
                 if (task != null) {
-                    if (isDone) task.markAsDone();
+                    if (isDone) {
+                        task.markAsDone();
+                    }
                     tasks.add(task);
                 }
             }

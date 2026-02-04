@@ -1,9 +1,12 @@
 package kira.command;
 
 import kira.Storage;
-import kira.task.TaskList;
 import kira.Ui;
+import kira.task.TaskList;
 
+/**
+ * Lists all tasks to the user.
+ */
 public class ListCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
@@ -13,3 +16,5 @@ public class ListCommand extends Command {
         }
     }
 }
+
+// End of ListCommand.java

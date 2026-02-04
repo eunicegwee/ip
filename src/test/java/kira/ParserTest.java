@@ -1,11 +1,16 @@
 package kira;
 
-import kira.command.*;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
+
+import kira.command.AddCommand;
+import kira.command.Command;
+import kira.command.DeleteCommand;
+import kira.command.ExitCommand;
+import kira.command.FindCommand;
 
 public class ParserTest {
 

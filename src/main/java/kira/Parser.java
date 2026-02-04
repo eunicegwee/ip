@@ -8,9 +8,9 @@ import kira.command.Command;
 import kira.command.DeleteCommand;
 import kira.command.ExitCommand;
 import kira.command.FilterCommand;
+import kira.command.FindCommand;
 import kira.command.ListCommand;
 import kira.command.MarkCommand;
-import kira.command.FindCommand;
 import kira.task.Deadline;
 import kira.task.Event;
 import kira.task.ToDo;
@@ -30,29 +30,41 @@ public class Parser {
         String[] parts = fullCommand.split(" ", 2); // Split command word and arguments
         String commandWord = parts[0].toLowerCase();
 
-        return switch (commandWord) {
-            case "bye" -> new ExitCommand();
-            case "list" -> new ListCommand();
-            case "mark" -> new MarkCommand(parseIndex(parts), true); // true = mark
-            case "unmark" -> new MarkCommand(parseIndex(parts), false); // false = unmark
-            case "delete" -> new DeleteCommand(parseIndex(parts));
-            case "find" -> {
-                if (parts.length < 2) throw new KiraException("OOPS! Please specify a search keyword.");
-                yield new FindCommand(parts[1]);
+        if (commandWord.equals("bye")) {
+            return new ExitCommand();
+        } else if (commandWord.equals("list")) {
+            return new ListCommand();
+        } else if (commandWord.equals("mark")) {
+            return new MarkCommand(parseIndex(parts), true);
+        } else if (commandWord.equals("unmark")) {
+            return new MarkCommand(parseIndex(parts), false);
+        } else if (commandWord.equals("delete")) {
+            return new DeleteCommand(parseIndex(parts));
+        } else if (commandWord.equals("find")) {
+            if (parts.length < 2) {
+                throw new KiraException("OOPS! Please specify a search keyword.");
             }
-            case "todo" -> {
-                if (parts.length < 2) throw new KiraException("OOPS! The description of a todo cannot be empty.");
-                yield new AddCommand(new ToDo(parts[1]));
+            return new FindCommand(parts[1]);
+        } else if (commandWord.equals("todo")) {
+            if (parts.length < 2) {
+                throw new KiraException("OOPS! The description of a todo cannot be empty.");
             }
-            case "deadline" -> prepareDeadline(parts);
-            case "event" -> prepareEvent(parts);
-            case "filter" -> prepareFilter(parts);
-            default -> throw new KiraException("OOPS! I'm sorry, but I don't know what that means :-(");
-        };
+            return new AddCommand(new ToDo(parts[1]));
+        } else if (commandWord.equals("deadline")) {
+            return prepareDeadline(parts);
+        } else if (commandWord.equals("event")) {
+            return prepareEvent(parts);
+        } else if (commandWord.equals("filter")) {
+            return prepareFilter(parts);
+        } else {
+            throw new KiraException("OOPS! I'm sorry, but I don't know what that means :-(");
+        }
     }
 
     private static int parseIndex(String[] parts) throws KiraException {
-        if (parts.length < 2) throw new KiraException("OOPS! Please specify the task number.");
+        if (parts.length < 2) {
+            throw new KiraException("OOPS! Please specify the task number.");
+        }
         try {
             return Integer.parseInt(parts[1]) - 1;
         } catch (NumberFormatException e) {
@@ -61,9 +73,13 @@ public class Parser {
     }
 
     private static Command prepareDeadline(String[] parts) throws KiraException {
-        if (parts.length < 2) throw new KiraException("OOPS! The description of a deadline cannot be empty.");
+        if (parts.length < 2) {
+            throw new KiraException("OOPS! The description of a deadline cannot be empty.");
+        }
         String[] dParts = parts[1].split(" /by ");
-        if (dParts.length < 2) throw new KiraException("OOPS! Please add a deadline time (use /by).");
+        if (dParts.length < 2) {
+            throw new KiraException("OOPS! Please add a deadline time (use /by).");
+        }
         try {
             return new AddCommand(new Deadline(dParts[0], dParts[1]));
         } catch (DateTimeParseException e) {
@@ -72,11 +88,17 @@ public class Parser {
     }
 
     private static Command prepareEvent(String[] parts) throws KiraException {
-        if (parts.length < 2) throw new KiraException("OOPS! The description of an event cannot be empty.");
+        if (parts.length < 2) {
+            throw new KiraException("OOPS! The description of an event cannot be empty.");
+        }
         String[] eParts = parts[1].split(" /from ");
-        if (eParts.length < 2) throw new KiraException("OOPS! Please add a start time (use /from).");
+        if (eParts.length < 2) {
+            throw new KiraException("OOPS! Please add a start time (use /from).");
+        }
         String[] timeParts = eParts[1].split(" /to ");
-        if (timeParts.length < 2) throw new KiraException("OOPS! Please add an end time (use /to).");
+        if (timeParts.length < 2) {
+            throw new KiraException("OOPS! Please add an end time (use /to).");
+        }
         try {
             return new AddCommand(new Event(eParts[0], timeParts[0], timeParts[1]));
         } catch (DateTimeParseException e) {
@@ -96,3 +118,6 @@ public class Parser {
         }
     }
 }
+
+// End of Parser.java
+

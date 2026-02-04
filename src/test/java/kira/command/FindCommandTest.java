@@ -1,6 +1,5 @@
 package kira.command;
 
-import kira.Storage;
 import kira.Ui;
 import kira.task.TaskList;
 import kira.task.ToDo;
@@ -9,12 +8,14 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FindCommandTest {
 
     private static class CapturingUi extends Ui {
-        List<String> messages = new ArrayList<>();
+        private List<String> messages = new ArrayList<>();
 
         @Override
         public void showMessage(String message) {
@@ -24,6 +25,10 @@ public class FindCommandTest {
         @Override
         public void showError(String message) {
             messages.add(message);
+        }
+
+        public List<String> getMessages() {
+            return messages;
         }
     }
 
@@ -38,11 +43,11 @@ public class FindCommandTest {
         FindCommand cmd = new FindCommand("book");
         cmd.execute(tasks, ui, null);
 
-        assertFalse(ui.messages.isEmpty());
-        assertEquals("Here are the matching tasks in your list:", ui.messages.get(0));
+        assertFalse(ui.getMessages().isEmpty());
+        assertEquals("Here are the matching tasks in your list:", ui.getMessages().get(0));
 
-        boolean hasReadBook = ui.messages.stream().anyMatch(m -> m.contains("read book"));
-        boolean hasBookFlight = ui.messages.stream().anyMatch(m -> m.contains("book flight"));
+        boolean hasReadBook = ui.getMessages().stream().anyMatch(m -> m.contains("read book"));
+        boolean hasBookFlight = ui.getMessages().stream().anyMatch(m -> m.contains("book flight"));
         assertTrue(hasReadBook);
         assertTrue(hasBookFlight);
     }
@@ -56,6 +61,6 @@ public class FindCommandTest {
         FindCommand cmd = new FindCommand("xyz");
         cmd.execute(tasks, ui, null);
 
-        assertTrue(ui.messages.stream().anyMatch(m -> m.contains("No matching tasks found")));
+        assertTrue(ui.getMessages().stream().anyMatch(m -> m.contains("No matching tasks found")));
     }
 }

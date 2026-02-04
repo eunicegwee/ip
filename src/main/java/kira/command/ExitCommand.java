@@ -1,9 +1,12 @@
 package kira.command;
 
 import kira.Storage;
-import kira.task.TaskList;
 import kira.Ui;
+import kira.task.TaskList;
 
+/**
+ * Command to exit the application.
+ */
 public class ExitCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
@@ -15,3 +18,5 @@ public class ExitCommand extends Command {
         return true;
     }
 }
+
+// End of ExitCommand.java

@@ -2,6 +2,9 @@ package kira.task;
 
 import java.util.ArrayList;
 
+/**
+ * A simple container for storing tasks.
+ */
 public class TaskList {
     private ArrayList<Task> tasks;
 
@@ -33,3 +36,5 @@ public class TaskList {
         return tasks;
     }
 }
+
+// End of TaskList.java
