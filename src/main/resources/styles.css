@@ -1,0 +1,39 @@
+/* Dialog bubble styles */
+.dialog-box {
+  -fx-padding: 8 12 8 12;
+  -fx-background-color: transparent;
+}
+
+.user .label {
+  -fx-background-color: #cfe9ff;
+  -fx-background-radius: 10px;
+  -fx-padding: 6 10 6 10;
+  -fx-text-fill: #000000;
+}
+
+.kira .label {
+  -fx-background-color: #e8e8e8;
+  -fx-background-radius: 10px;
+  -fx-padding: 6 10 6 10;
+  -fx-text-fill: #000000;
+}
+
+/* Alignments */
+.dialog-box.user {
+  -fx-alignment: CENTER_RIGHT;
+}
+
+.dialog-box.kira {
+  -fx-alignment: CENTER_LEFT;
+}
+
+/* Image sizing */
+.image-view {
+  -fx-fit-width: 48px;
+  -fx-fit-height: 48px;
+}
+
+/* ScrollPane background */
+.root {
+  -fx-background-color: #ffffff;
+}

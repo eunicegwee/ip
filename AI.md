@@ -2,7 +2,7 @@
 
 ## AI Tools Used
 - **Gemini 3 Pro (Preview)**: Used for all increments and development tasks.
-- **GitHub Copilot (GPT-5 mini)**: Used specifically for increment Level-9 (assisted code suggestions via the Copilot extension).
+- **GitHub Copilot (GPT-5 mini)**: Used for increment Level-9 onwards (assisted code suggestions via the Copilot extension).
 
 ## Observations
 
@@ -18,3 +18,4 @@
 
 ## Impact
 - **Time Saved**: Overall, I estimate the AI saved approximately 40-50% of the total development time. The speed-up was most noticeable during the initial setup and when writing test cases.
+End of AI.md

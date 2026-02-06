@@ -3,6 +3,7 @@ plugins {
     id 'application'
     id 'checkstyle'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 checkstyle {
@@ -33,12 +34,17 @@ test {
 }
 
 application {
-    mainClass.set("kira.Kira")
+    mainClass.set("kira.Launcher")
+}
+
+javafx {
+    version = "17"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
 shadowJar {
-    archiveBaseName = "kira"
-    archiveClassifier = null
+    archiveBaseName.set("kira")
+    archiveClassifier.set("")
 }
 
 run{

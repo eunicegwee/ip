@@ -1,1 +1,4 @@
-T | 1 | return book
+T | 0 | complete Level 10
+E | 0 | attend CS2103T tutorial | 2026-02-05 15:00 | 2026-02-05 16:00
+D | 1 | complete CS2101 slides | 2026-02-08 23:59
+T | 0 | clean my room
