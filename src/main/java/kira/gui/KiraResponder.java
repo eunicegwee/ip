@@ -67,7 +67,7 @@ public class KiraResponder {
         if (kiraBackend != null) {
             return kiraBackend.handleCommand(input);
         }
-        return new CommandResult(List.of("Kira heard: " + input), false);
+        return new CommandResult(false, "Kira heard: " + input);
     }
 
     /**
@@ -95,7 +95,7 @@ public class KiraResponder {
             result.add(joiner.toString());
             return new CommandResult(result, false);
         }
-        return new CommandResult(List.of(" Hello! I'm Kira.", "Supported commands: ..."), false);
+        return new CommandResult(false, " Hello! I'm Kira.", "Supported commands: ...");
     }
 }
 

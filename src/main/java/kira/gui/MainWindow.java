@@ -107,7 +107,7 @@ public class MainWindow extends AnchorPane {
             @Override
             protected CommandResult call() {
                 return (kiraResponder != null) ? kiraResponder.executeCommand(input)
-                        : new CommandResult(java.util.List.of("Kira heard: " + input), false);
+                        : new CommandResult(false, "Kira heard: " + input);
             }
         };
 

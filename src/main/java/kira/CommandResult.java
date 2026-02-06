@@ -1,5 +1,7 @@
 package kira;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,6 +19,20 @@ public class CommandResult {
      */
     public CommandResult(List<String> messages, boolean isExit) {
         this.messages = messages;
+        this.isExit = isExit;
+    }
+
+    /**
+     * Convenience constructor allowing creation from varargs of message strings.
+     *
+     * @param isExit whether this command indicates the application should exit
+     * @param messages message lines to include in the result
+     */
+    public CommandResult(boolean isExit, String... messages) {
+        this.messages = new ArrayList<>();
+        if (messages != null) {
+            this.messages.addAll(Arrays.asList(messages));
+        }
         this.isExit = isExit;
     }
 
