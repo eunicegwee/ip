@@ -22,11 +22,13 @@ public class ResponseUi extends Ui {
 
     @Override
     public void showMessage(String message) {
+        assert message != null : "message must not be null";
         lines.add(message);
     }
 
     @Override
     public void showError(String message) {
+        assert message != null : "message must not be null";
         lines.add(message);
     }
 
