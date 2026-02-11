@@ -8,8 +8,11 @@ import java.time.format.DateTimeFormatter;
  */
 public class Event extends Task {
 
-    protected LocalDateTime from;
-    protected LocalDateTime to;
+    private static final DateTimeFormatter STORAGE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("MMM d yyyy HH:mm");
+
+    private final LocalDateTime from;
+    private final LocalDateTime to;
 
     /**
      * Constructs an Event with the given description, start and end datetimes.
@@ -20,9 +23,8 @@ public class Event extends Task {
      */
     public Event(String description, String from, String to) {
         super(description);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        this.from = LocalDateTime.parse(from, formatter);
-        this.to = LocalDateTime.parse(to, formatter);
+        this.from = LocalDateTime.parse(from, STORAGE_FORMAT);
+        this.to = LocalDateTime.parse(to, STORAGE_FORMAT);
     }
 
     /**
@@ -41,16 +43,14 @@ public class Event extends Task {
 
     @Override
     public String toFileFormat() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return "E | " + (isDone ? "1" : "0") + " | " + description + " | "
-                + from.format(formatter) + " | " + to.format(formatter);
+                + from.format(STORAGE_FORMAT) + " | " + to.format(STORAGE_FORMAT);
     }
 
     @Override
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy HH:mm");
-        return "[E]" + super.toString() + " (from: " + from.format(formatter)
-                + " to: " + to.format(formatter) + ")";
+        return "[E]" + super.toString() + " (from: " + from.format(DISPLAY_FORMAT)
+                + " to: " + to.format(DISPLAY_FORMAT) + ")";
     }
 }
 

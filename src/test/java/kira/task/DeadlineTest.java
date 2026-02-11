@@ -1,7 +1,9 @@
 package kira.task;
 
-import org.junit.jupiter.api.Test;
 import java.time.format.DateTimeParseException;
+
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -21,8 +23,6 @@ public class DeadlineTest {
 
     @Test
     public void constructor_invalidDateFormat_throwsException() {
-        assertThrows(DateTimeParseException.class, () -> {
-            new Deadline("return book", "Sunday");
-        });
+        assertThrows(DateTimeParseException.class, () -> new Deadline("return book", "Sunday"));
     }
 }

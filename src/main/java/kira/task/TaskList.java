@@ -6,14 +6,15 @@ import java.util.ArrayList;
  * A simple container for storing tasks.
  */
 public class TaskList {
-    private ArrayList<Task> tasks;
+    private final ArrayList<Task> tasks;
 
     public TaskList() {
         this.tasks = new ArrayList<>();
     }
 
     public TaskList(ArrayList<Task> tasks) {
-        this.tasks = tasks;
+        // Defensive copy to avoid retaining external references
+        this.tasks = new ArrayList<>(tasks == null ? new ArrayList<>() : tasks);
     }
 
     public void add(Task t) {
@@ -33,7 +34,7 @@ public class TaskList {
     }
 
     public ArrayList<Task> getAll() {
-        return tasks;
+        return new ArrayList<>(tasks);
     }
 }
 

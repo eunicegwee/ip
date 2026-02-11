@@ -3,6 +3,7 @@ package kira;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Collections;
 
 /**
  * Encapsulates a response from the Kira backend as a list of message lines.
@@ -18,7 +19,7 @@ public class CommandResult {
      * @param isExit whether this command indicates the application should exit
      */
     public CommandResult(List<String> messages, boolean isExit) {
-        this.messages = messages;
+        this.messages = messages == null ? new ArrayList<>() : new ArrayList<>(messages);
         this.isExit = isExit;
     }
 
@@ -37,7 +38,7 @@ public class CommandResult {
     }
 
     public List<String> getMessages() {
-        return messages;
+        return Collections.unmodifiableList(messages);
     }
 
     public boolean isExit() {
