@@ -44,6 +44,11 @@ public class MarkCommand extends Command {
         ui.showMessage("   " + task);
         storage.save(tasks);
     }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
 }
 
 // End of MarkCommand.java

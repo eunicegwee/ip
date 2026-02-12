@@ -27,6 +27,14 @@ public class Event extends Task {
         this.to = LocalDateTime.parse(to, STORAGE_FORMAT);
     }
 
+    // package-private constructor for copying
+    Event(String description, LocalDateTime from, LocalDateTime to, boolean isDone) {
+        super(description);
+        this.from = from;
+        this.to = to;
+        this.isDone = isDone;
+    }
+
     /**
      * Returns the start datetime of the event.
      */
@@ -51,6 +59,11 @@ public class Event extends Task {
     public String toString() {
         return "[E]" + super.toString() + " (from: " + from.format(DISPLAY_FORMAT)
                 + " to: " + to.format(DISPLAY_FORMAT) + ")";
+    }
+
+    @Override
+    public Task copy() {
+        return new Event(this.description, this.from, this.to, this.isDone);
     }
 }
 

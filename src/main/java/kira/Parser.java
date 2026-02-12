@@ -11,6 +11,7 @@ import kira.command.FilterCommand;
 import kira.command.FindCommand;
 import kira.command.ListCommand;
 import kira.command.MarkCommand;
+import kira.command.UndoCommand;
 import kira.task.Deadline;
 import kira.task.Event;
 import kira.task.ToDo;
@@ -37,6 +38,8 @@ public class Parser {
             return new ExitCommand();
         } else if (commandWord.equals("list")) {
             return new ListCommand();
+        } else if (commandWord.equals("undo")) {
+            return new UndoCommand();
         } else if (commandWord.equals("mark")) {
             return new MarkCommand(parseIndex(parts), true);
         } else if (commandWord.equals("unmark")) {

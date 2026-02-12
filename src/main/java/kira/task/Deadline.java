@@ -24,6 +24,13 @@ public class Deadline extends Task {
         this.by = LocalDateTime.parse(by, STORAGE_FORMAT);
     }
 
+    // package-private constructor for copying
+    Deadline(String description, LocalDateTime by, boolean isDone) {
+        super(description);
+        this.by = by;
+        this.isDone = isDone;
+    }
+
     /**
      * Returns the deadline datetime.
      */
@@ -41,6 +48,11 @@ public class Deadline extends Task {
     public String toString() {
         return "[D]" + super.toString() + " (by: "
                 + by.format(DISPLAY_FORMAT) + ")";
+    }
+
+    @Override
+    public Task copy() {
+        return new Deadline(this.description, this.by, this.isDone);
     }
 }
 

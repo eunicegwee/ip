@@ -27,6 +27,11 @@ public class DeleteCommand extends Command {
         ui.showMessage("   " + removed);
         ui.showMessage(" Now you have " + tasks.size() + " TASKS in the list!");
     }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
 }
 
 // End of DeleteCommand.java

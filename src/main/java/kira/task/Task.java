@@ -37,6 +37,11 @@ public abstract class Task {
      */
     public abstract String toFileFormat();
 
+    /**
+     * Create a deep copy of this task. Concrete subclasses must implement.
+     */
+    public abstract Task copy();
+
     @Override
     public String toString() {
         return "[" + getStatusIcon() + "] " + description;
@@ -44,4 +49,3 @@ public abstract class Task {
 }
 
 // End of Task.java
-

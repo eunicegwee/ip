@@ -23,6 +23,11 @@ public class AddCommand extends Command {
         ui.showMessage("   " + task);
         ui.showMessage(" Now you have " + tasks.size() + " TASKS in the list!");
     }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
 }
 
 // End of AddCommand.java

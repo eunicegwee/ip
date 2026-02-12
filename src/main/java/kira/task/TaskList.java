@@ -66,6 +66,29 @@ public class TaskList {
         assert tasks != null : "tasks list must not be null";
         return new ArrayList<>(tasks);
     }
+
+    /**
+     * Create a deep copy of this TaskList (tasks are copied via Task.copy()).
+     */
+    public TaskList copy() {
+        ArrayList<Task> newList = new ArrayList<>();
+        for (Task t : this.tasks) {
+            newList.add(t.copy());
+        }
+        return new TaskList(newList);
+    }
+
+    /**
+     * Replace this TaskList's contents with another TaskList's contents.
+     * The receiver's internal list will be cleared and filled with copies of the other's tasks.
+     */
+    public void replaceWith(TaskList other) {
+        assert other != null : "other must not be null";
+        this.tasks.clear();
+        for (Task t : other.getAll()) {
+            this.tasks.add(t.copy());
+        }
+    }
 }
 
 // End of TaskList.java

@@ -14,6 +14,14 @@ public abstract class Command {
     public boolean isExit() {
         return false;
     }
+
+    /**
+     * Whether this command modifies the task list and therefore should be undoable.
+     * Default is false; mutating commands should override to return true.
+     */
+    public boolean isUndoable() {
+        return false;
+    }
 }
 
 // End of Command.java

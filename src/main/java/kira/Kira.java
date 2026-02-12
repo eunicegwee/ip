@@ -1,9 +1,12 @@
 package kira;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 import kira.command.Command;
+import kira.command.UndoCommand;
 import kira.task.TaskList;
 
 /**
@@ -14,6 +17,9 @@ public class Kira {
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
+
+    // Stack of previous TaskList snapshots for undo (most recent on top)
+    private final Deque<TaskList> undoStack = new ArrayDeque<>();
 
     /**
      * Constructs a new Kira instance using the console UI.
@@ -80,8 +86,25 @@ public class Kira {
             Command c = Parser.parse(input);
             // Parser should not return null for recognized input
             assert c != null : "parsed command must not be null";
-            c.execute(tasks, ui, storage);
-            isExit = c.isExit();
+
+            // If the command is undo, handle it here by popping the stack
+            if (c instanceof UndoCommand) {
+                if (undoStack.isEmpty()) {
+                    ui.showError("Nothing to undo.");
+                } else {
+                    TaskList previous = undoStack.pop();
+                    tasks.replaceWith(previous);
+                    storage.save(tasks);
+                    ui.showMessage("Okay, undone last action.");
+                }
+            } else {
+                // For other commands, snapshot if undoable
+                if (c.isUndoable()) {
+                    undoStack.push(tasks.copy());
+                }
+                c.execute(tasks, ui, storage);
+                isExit = c.isExit();
+            }
         } catch (KiraException e) {
             ui.showError(e.getMessage());
         } finally {
@@ -132,6 +155,7 @@ public class Kira {
         cmds.add("  find <keyword>");
         cmds.add("  filter <yyyy-MM-dd>");
         cmds.add("  bye");
+        cmds.add("  undo");
 
         // Ensure we actually provide command descriptions
         assert cmds != null && !cmds.isEmpty() : "supported commands must be present";
@@ -159,9 +183,23 @@ public class Kira {
 
                 Command c = Parser.parse(fullCommand);
 
-                c.execute(tasks, ui, storage);
-
-                isExit = c.isExit();
+                // If the command is undo, handle it here by popping the stack
+                if (c instanceof UndoCommand) {
+                    if (undoStack.isEmpty()) {
+                        ui.showError("Nothing to undo.");
+                    } else {
+                        TaskList previous = undoStack.pop();
+                        tasks.replaceWith(previous);
+                        storage.save(tasks);
+                        ui.showMessage("Okay, undone last action.");
+                    }
+                } else {
+                    if (c.isUndoable()) {
+                        undoStack.push(tasks.copy());
+                    }
+                    c.execute(tasks, ui, storage);
+                    isExit = c.isExit();
+                }
 
             } catch (KiraException e) {
                 ui.showError(e.getMessage());
