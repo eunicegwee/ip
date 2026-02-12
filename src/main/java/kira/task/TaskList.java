@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * A simple container for storing tasks.
  */
 public class TaskList {
-    private ArrayList<Task> tasks;
+    private final ArrayList<Task> tasks;
 
     /**
      * Constructs an empty TaskList.
@@ -64,7 +64,7 @@ public class TaskList {
 
     public ArrayList<Task> getAll() {
         assert tasks != null : "tasks list must not be null";
-        return tasks;
+        return new ArrayList<>(tasks);
     }
 }
 

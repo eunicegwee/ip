@@ -6,7 +6,7 @@ import java.util.Scanner;
  * Handles all user interactions, including reading input and printing messages to the console.
  */
 public class Ui {
-    private static final String LINE = "____________________________________________________________";
+    private static final String DIVIDER = "____________________________________________________________";
     private final Scanner in;
 
     public Ui() {
@@ -46,7 +46,7 @@ public class Ui {
      * Prints a horizontal divider line.
      */
     public void showLine() {
-        System.out.println(LINE);
+        System.out.println(DIVIDER);
     }
 
     /**
@@ -70,6 +70,14 @@ public class Ui {
      */
     public void showMessage(String message) {
         System.out.println(" " + message);
+    }
+
+    /**
+     * Close any resources used by Ui (scanner).
+     * No-op for subclasses that do not use System.in.
+     */
+    public void close() {
+        in.close();
     }
 }
 

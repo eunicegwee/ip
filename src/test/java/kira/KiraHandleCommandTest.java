@@ -1,7 +1,6 @@
 package kira;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,9 +22,16 @@ public class KiraHandleCommandTest {
         CommandResult res1 = kira.handleCommand("todo read book");
         List<String> msgs1 = res1.getMessages();
         assertFalse(msgs1.isEmpty(), "Expected messages after adding a todo");
-        boolean containsAdd = msgs1.stream().anyMatch(s -> s.toLowerCase().contains("task added")
-                || s.toLowerCase().contains("yay")
-                || s.toLowerCase().contains("task added:"));
+        boolean containsAdd = false;
+        for (String s : msgs1) {
+            String lower = s.toLowerCase();
+            if (lower.contains("task added")
+                || lower.contains("yay")
+                || lower.contains("task added:")) {
+                containsAdd = true;
+                break;
+            }
+        }
         assertTrue(containsAdd, "Add command should report task added");
 
         // List tasks

@@ -7,7 +7,6 @@ import java.util.List;
  * A Ui implementation that captures output into a list of lines for GUI use.
  */
 public class ResponseUi extends Ui {
-    private static final String LINE = "____________________________________________________________";
     private final List<String> lines = new ArrayList<>();
 
     @Override

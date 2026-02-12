@@ -16,7 +16,10 @@ import kira.task.ToDo;
  * Handles loading tasks from the file and saving tasks back to the file.
  */
 public class Storage {
-    private String filePath;
+    private static final String SEP = " \\| ";
+    private static final String SAVE_ERROR = "Error saving tasks: ";
+
+    private final String filePath;
 
     public Storage(String filePath) {
         // Preconditions
@@ -44,7 +47,11 @@ public class Storage {
             Scanner s = new Scanner(file);
             while (s.hasNext()) {
                 String line = s.nextLine();
-                String[] parts = line.split(" \\| "); // Split by " | "
+                String[] parts = line.split(SEP); // Split by " | "
+
+                if (parts.length < 3) {
+                    throw new KiraException("Corrupted data line: " + line);
+                }
 
                 String type = parts[0];
                 boolean isDone = parts[1].equals("1");
@@ -55,8 +62,14 @@ public class Storage {
                 if ("T".equals(type)) {
                     task = new ToDo(description);
                 } else if ("D".equals(type)) {
+                    if (parts.length < 4) {
+                        throw new KiraException("Corrupted deadline line: " + line);
+                    }
                     task = new Deadline(description, parts[3]);
                 } else if ("E".equals(type)) {
+                    if (parts.length < 5) {
+                        throw new KiraException("Corrupted event line: " + line);
+                    }
                     task = new Event(description, parts[3], parts[4]);
                 } else {
                     task = null;
@@ -86,7 +99,13 @@ public class Storage {
 
         try {
             File file = new File(filePath);
-            file.getParentFile().mkdirs();
+            File parent = file.getParentFile();
+            if (parent != null) {
+                boolean dirsCreated = parent.mkdirs();
+                if (!dirsCreated && !parent.exists()) {
+                    // Directory creation failed or was unnecessary; FileWriter will throw if path is invalid.
+                }
+            }
 
             FileWriter fw = new FileWriter(filePath);
             for (Task task : tasks.getAll()) {
@@ -94,7 +113,7 @@ public class Storage {
             }
             fw.close();
         } catch (IOException e) {
-            System.out.println("Error saving tasks: " + e.getMessage());
+            System.out.println(SAVE_ERROR + e.getMessage());
         }
     }
 }

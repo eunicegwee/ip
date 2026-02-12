@@ -1,5 +1,9 @@
 package kira.command;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,14 +13,10 @@ import kira.Ui;
 import kira.task.TaskList;
 import kira.task.ToDo;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 public class FindCommandTest {
 
     private static class CapturingUi extends Ui {
-        private List<String> messages = new ArrayList<>();
+        private final List<String> messages = new ArrayList<>();
 
         @Override
         public void showMessage(String message) {

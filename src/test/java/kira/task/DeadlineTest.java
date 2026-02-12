@@ -23,8 +23,6 @@ public class DeadlineTest {
 
     @Test
     public void constructor_invalidDateFormat_throwsException() {
-        assertThrows(DateTimeParseException.class, () -> {
-            new Deadline("return book", "Sunday");
-        });
+        assertThrows(DateTimeParseException.class, () -> new Deadline("return book", "Sunday"));
     }
 }
