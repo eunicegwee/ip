@@ -18,6 +18,7 @@ public class CommandResult {
      * @param isExit whether this command indicates the application should exit
      */
     public CommandResult(List<String> messages, boolean isExit) {
+        assert messages != null : "messages must not be null";
         this.messages = messages;
         this.isExit = isExit;
     }

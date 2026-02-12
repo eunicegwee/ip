@@ -27,6 +27,9 @@ public class Parser {
      * @throws KiraException If the command is unknown or the format is invalid.
      */
     public static Command parse(String fullCommand) throws KiraException {
+        // Precondition
+        assert fullCommand != null : "fullCommand must not be null";
+
         String[] parts = fullCommand.split(" ", 2); // Split command word and arguments
         String commandWord = parts[0].toLowerCase();
 
@@ -62,6 +65,9 @@ public class Parser {
     }
 
     private static int parseIndex(String[] parts) throws KiraException {
+        // Precondition
+        assert parts != null : "parts must not be null";
+
         if (parts.length < 2) {
             throw new KiraException("OOPS! Please specify the task number.");
         }
@@ -73,6 +79,9 @@ public class Parser {
     }
 
     private static Command prepareDeadline(String[] parts) throws KiraException {
+        // Precondition
+        assert parts != null : "parts must not be null";
+
         if (parts.length < 2) {
             throw new KiraException("OOPS! The description of a deadline cannot be empty.");
         }
@@ -88,6 +97,9 @@ public class Parser {
     }
 
     private static Command prepareEvent(String[] parts) throws KiraException {
+        // Precondition
+        assert parts != null : "parts must not be null";
+
         if (parts.length < 2) {
             throw new KiraException("OOPS! The description of an event cannot be empty.");
         }
@@ -107,6 +119,9 @@ public class Parser {
     }
 
     private static Command prepareFilter(String[] parts) throws KiraException {
+        // Precondition
+        assert parts != null : "parts must not be null";
+
         if (parts.length < 2) {
             throw new KiraException("OOPS! Please specify a date (e.g., filter 2025-01-30).");
         }

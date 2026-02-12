@@ -20,6 +20,9 @@ public class Kira {
      * @param filePath The file path where tasks are stored and retrieved.
      */
     public Kira(String filePath) {
+        // Precondition: filePath should not be null
+        assert filePath != null : "filePath must not be null";
+
         this.ui = new Ui();
         this.storage = new Storage(filePath);
         try {
@@ -28,6 +31,9 @@ public class Kira {
             ui.showLoadingError();
             tasks = new TaskList();
         }
+
+        // Invariant: tasks must be initialized after constructor
+        assert tasks != null : "tasks must not be null after load";
     }
 
     /**
@@ -36,6 +42,10 @@ public class Kira {
      * @param ui the Ui implementation to receive output (e.g., ResponseUi for GUI)
      */
     public Kira(String filePath, Ui ui) {
+        // Preconditions: both filePath and ui should not be null
+        assert filePath != null : "filePath must not be null";
+        assert ui != null : "ui must not be null";
+
         this.ui = ui;
         this.storage = new Storage(filePath);
         try {
@@ -44,6 +54,9 @@ public class Kira {
             ui.showLoadingError();
             tasks = new TaskList();
         }
+
+        // Invariant: tasks must be initialized after constructor
+        assert tasks != null : "tasks must not be null after load";
     }
 
     /**
@@ -57,10 +70,16 @@ public class Kira {
      * @return a {@link CommandResult} with message lines and exit flag
      */
     public CommandResult handleCommand(String input) {
+        // Preconditions
+        assert input != null : "input must not be null";
+        assert ui != null : "ui must be non-null";
+
         boolean isExit = false;
         try {
             ui.showLine();
             Command c = Parser.parse(input);
+            // Parser should not return null for recognized input
+            assert c != null : "parsed command must not be null";
             c.execute(tasks, ui, storage);
             isExit = c.isExit();
         } catch (KiraException e) {
@@ -85,6 +104,8 @@ public class Kira {
      * @return welcome messages as a {@link CommandResult}
      */
     public CommandResult handleWelcome() {
+        assert ui != null : "ui must be non-null";
+
         ui.showWelcome();
         List<String> outputLines = new ArrayList<>();
         if (ui instanceof ResponseUi) {
@@ -111,6 +132,9 @@ public class Kira {
         cmds.add("  find <keyword>");
         cmds.add("  filter <yyyy-MM-dd>");
         cmds.add("  bye");
+
+        // Ensure we actually provide command descriptions
+        assert cmds != null && !cmds.isEmpty() : "supported commands must be present";
         return cmds;
     }
 
@@ -118,12 +142,19 @@ public class Kira {
      * Runs the main program loop (console mode).
      */
     public void run() {
+        // Basic invariants before entering the loop
+        assert ui != null : "ui must be non-null";
+        assert storage != null : "storage must be non-null";
+        assert tasks != null : "tasks must be non-null";
+
         ui.showWelcome();
         boolean isExit = false;
 
         while (!isExit) {
             try {
                 String fullCommand = ui.readCommand();
+                // readCommand should not return null in normal operation
+                assert fullCommand != null : "readCommand must not return null";
                 ui.showLine();
 
                 Command c = Parser.parse(fullCommand);
