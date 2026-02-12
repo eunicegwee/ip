@@ -21,6 +21,11 @@ public class Storage {
 
     private final String filePath;
 
+    /**
+     * Constructs a Storage instance bound to the given file path.
+     *
+     * @param filePath path of the storage file
+     */
     public Storage(String filePath) {
         // Preconditions
         assert filePath != null : "filePath must not be null";

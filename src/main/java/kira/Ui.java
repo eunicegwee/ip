@@ -9,6 +9,9 @@ public class Ui {
     private static final String DIVIDER = "____________________________________________________________";
     private final Scanner in;
 
+    /**
+     * Constructs a Ui that reads from standard input.
+     */
     public Ui() {
         this.in = new Scanner(System.in);
         assert in != null : "Scanner must be initialized";

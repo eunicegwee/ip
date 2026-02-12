@@ -1,6 +1,7 @@
 package kira.command;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -59,14 +60,18 @@ public class UndoDeadlineEventTest {
         // mark the deadline as done
         kira.handleCommand("mark 1");
         CommandResult afterMark = kira.handleCommand("list");
-        assertTrue(afterMark.getMessages().stream().anyMatch(s -> s.toLowerCase().contains("[x]") && s.toLowerCase().contains("pay bills")));
+        boolean markedNow = afterMark.getMessages().stream()
+                .anyMatch(s -> s.toLowerCase().contains("[x]")
+                        && s.toLowerCase().contains("pay bills"));
+        assertTrue(markedNow);
 
         // undo mark
         kira.handleCommand("undo");
         CommandResult afterUndo = kira.handleCommand("list");
         // should be not done (no [X])
-        boolean marked = afterUndo.getMessages().stream().anyMatch(s -> s.toLowerCase().contains("[x]") && s.toLowerCase().contains("pay bills"));
+        boolean marked = afterUndo.getMessages().stream()
+                .anyMatch(s -> s.toLowerCase().contains("[x]")
+                        && s.toLowerCase().contains("pay bills"));
         assertFalse(marked, "Undo should revert the mark on the deadline");
     }
 }
-
