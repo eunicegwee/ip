@@ -1,7 +1,6 @@
 package kira;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,7 +25,9 @@ public class KiraHandleCommandTest {
         boolean containsAdd = false;
         for (String s : msgs1) {
             String lower = s.toLowerCase();
-            if (lower.contains("task added") || lower.contains("yay") || lower.contains("task added:")) {
+            if (lower.contains("task added")
+                || lower.contains("yay")
+                || lower.contains("task added:")) {
                 containsAdd = true;
                 break;
             }

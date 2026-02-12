@@ -22,6 +22,8 @@ public class Storage {
     private final String filePath;
 
     public Storage(String filePath) {
+        // Preconditions
+        assert filePath != null : "filePath must not be null";
         this.filePath = filePath;
     }
 
@@ -31,6 +33,9 @@ public class Storage {
      * @throws KiraException If the file format is corrupted or cannot be read.
      */
     public ArrayList<Task> load() throws KiraException {
+        // Precondition
+        assert filePath != null : "filePath must not be null";
+
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
 
@@ -88,6 +93,10 @@ public class Storage {
      * @param tasks The TaskList containing tasks to save.
      */
     public void save(TaskList tasks) {
+        // Preconditions
+        assert filePath != null : "filePath must not be null";
+        assert tasks != null : "tasks must not be null";
+
         try {
             File file = new File(filePath);
             File parent = file.getParentFile();

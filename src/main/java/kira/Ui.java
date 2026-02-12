@@ -11,6 +11,7 @@ public class Ui {
 
     public Ui() {
         this.in = new Scanner(System.in);
+        assert in != null : "Scanner must be initialized";
     }
 
     /**
@@ -18,7 +19,9 @@ public class Ui {
      * @return The user's full command string.
      */
     public String readCommand() {
-        return in.nextLine();
+        String line = in.nextLine();
+        assert line != null : "readCommand should not return null";
+        return line;
     }
 
     /**
