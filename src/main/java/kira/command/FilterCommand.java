@@ -30,7 +30,7 @@ public class FilterCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         String formattedDate = targetDate.format(DateTimeFormatter.ofPattern("MMM d yyyy"));
-        ui.showMessage(" DEADLINES AND/OR EVENTS HAPPENING ON " + formattedDate + ":");
+        ui.showMessage("<b>Filtered! Here are deadlines and/or events on " + formattedDate + ":</b>");
 
         int count = 0;
         // Access the raw list using tasks.getAll()

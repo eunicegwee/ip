@@ -19,9 +19,10 @@ public class AddCommand extends Command {
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         tasks.add(task);
         storage.save(tasks);
-        ui.showMessage(" YAY! Task added:");
-        ui.showMessage("   " + task);
-        ui.showMessage(" Now you have " + tasks.size() + " TASKS in the list!");
+        // Use simple markup so GUI will render styled text (bold/italic)
+        ui.showMessage("<b>YAY! Task added:</b>");
+        ui.showMessage("   <i>" + task + "</i>");
+        ui.showMessage("Now you have <b>" + tasks.size() + "</b> TASKS in the list!");
     }
 
     @Override

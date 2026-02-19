@@ -30,7 +30,7 @@ public class Main extends Application {
             fxmlLoader.<MainWindow>getController().setKiraResponder(responder);
 
             stage.setTitle("Kira");
-            stage.setResizable(false);
+            stage.setResizable(true);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

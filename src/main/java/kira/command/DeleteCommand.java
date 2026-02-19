@@ -23,9 +23,9 @@ public class DeleteCommand extends Command {
         }
         Task removed = tasks.delete(index);
         storage.save(tasks);
-        ui.showMessage(" Okay, got it! REMOVED:");
+        ui.showMessage("<b>Okay, got it! REMOVED:</b>");
         ui.showMessage("   " + removed);
-        ui.showMessage(" Now you have " + tasks.size() + " TASKS in the list!");
+        ui.showMessage("Now you have " + tasks.size() + " TASKS in the list!");
     }
 
     @Override

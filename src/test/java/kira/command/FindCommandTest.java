@@ -33,6 +33,13 @@ public class FindCommandTest {
         }
     }
 
+    private static String stripTags(String s) {
+        if (s == null) {
+            return null;
+        }
+        return s.replaceAll("<[^>]+>", "");
+    }
+
     @Test
     public void execute_withMatches_showsMatchingTasks() throws Exception {
         TaskList tasks = new TaskList();
@@ -45,7 +52,8 @@ public class FindCommandTest {
         cmd.execute(tasks, ui, null);
 
         assertFalse(ui.getMessages().isEmpty());
-        assertEquals("Here are the matching tasks in your list:", ui.getMessages().get(0));
+        String first = stripTags(ui.getMessages().get(0));
+        assertEquals("Found these tasks matching \"book\" in your list:", first);
 
         boolean hasReadBook = ui.getMessages().stream().anyMatch(m -> m.contains("read book"));
         boolean hasBookFlight = ui.getMessages().stream().anyMatch(m -> m.contains("book flight"));

@@ -35,10 +35,10 @@ public class MarkCommand extends Command {
         Task task = tasks.get(index);
         if (isDone) {
             task.markAsDone();
-            ui.showMessage(" Yay! Task marked as done:");
+            ui.showMessage("<b>Yay! Task marked as done:</b>");
         } else {
             task.markAsUndone();
-            ui.showMessage(" Okay... got it, not done yet:");
+            ui.showMessage("<b>Okay... got it, not done yet:</b>");
         }
 
         ui.showMessage("   " + task);

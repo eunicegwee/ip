@@ -7,6 +7,8 @@ import java.util.List;
  * A Ui implementation that captures output into a list of lines for GUI use.
  */
 public class ResponseUi extends Ui {
+    public static final String ERROR_PREFIX = "__KIRA_ERROR__:";
+
     private final List<String> lines = new ArrayList<>();
 
     @Override
@@ -28,7 +30,7 @@ public class ResponseUi extends Ui {
     @Override
     public void showError(String message) {
         assert message != null : "message must not be null";
-        lines.add(message);
+        lines.add(ERROR_PREFIX + message);
     }
 
     @Override

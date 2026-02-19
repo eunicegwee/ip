@@ -18,7 +18,7 @@ public class FindCommand extends Command {
 
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws KiraException {
-        ui.showMessage("Here are the matching tasks in your list:");
+        ui.showMessage("<b>Found these tasks matching \"" + keyword + "\" in your list:</b>");
         int shown = 0;
         int idx = 1;
         String lower = keyword.toLowerCase();

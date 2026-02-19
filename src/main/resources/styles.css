@@ -1,21 +1,68 @@
-/* Dialog bubble styles */
+/* Palette (hex values used directly) */
+/* Prussian Blue: #0C0F25
+   Blue Slate:   #1D6380
+   Prussian Blue2:#0C172E
+   Space Indigo: #182759
+   Ink Black:    #0B0B1E */
+
+/* Global font and spacing */
+.root {
+  -fx-background-color: #ffffff;
+  -fx-font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -fx-font-size: 13px;
+}
+
+/* Header */
+.label.header {
+  -fx-font-size: 16px;
+  -fx-font-weight: bold;
+  -fx-padding: 6 8 6 8;
+  -fx-text-fill: #0C0F25; /* Prussian Blue */
+}
+
+/* Dialog bubble container */
 .dialog-box {
-  -fx-padding: 8 12 8 12;
+  -fx-padding: 4 6 4 6;
   -fx-background-color: transparent;
+  -fx-spacing: 8px;
 }
 
-.user .label {
-  -fx-background-color: #cfe9ff;
-  -fx-background-radius: 10px;
-  -fx-padding: 6 10 6 10;
-  -fx-text-fill: #000000;
+/* User bubble: strong accent, white text for contrast */
+.dialog-box.user .dialog-label {
+  -fx-background-color: #1D6380; /* Blue Slate */
+  -fx-background-radius: 12px 12px 6px 12px;
+  -fx-padding: 8 10 8 10;
+  -fx-text-fill: white;
+  -fx-border-color: transparent;
 }
 
-.kira .label {
-  -fx-background-color: #e8e8e8;
+/* Ensure Text nodes inside user bubble are white */
+.dialog-box.user .dialog-label Text {
+  -fx-fill: white;
+}
+
+/* Kira bubble: darker neutral using Prussian Blue 2; remove visible border so no rectangular outline */
+.dialog-box.kira .dialog-label {
+  -fx-background-color: #0C172E; /* Prussian Blue 2 */
+  -fx-border-color: transparent; /* remove visible rectangular outline */
+  -fx-border-width: 0px;
+  -fx-background-radius: 12px 12px 12px 6px;
+  -fx-padding: 8 10 8 10;
+  -fx-text-fill: #F8F9FB; /* very light text */
+}
+
+/* Ensure Text nodes inside Kira bubble are very light for contrast */
+.dialog-box.kira .dialog-label Text {
+  -fx-fill: #F8F9FB;
+}
+
+/* Error style for Kira messages (keep visible border for errors) */
+.dialog-box.kira.error .dialog-label {
+  -fx-background-color: linear-gradient(#ffefef, #ffd6d6);
+  -fx-border-color: #e74c3c;
+  -fx-border-width: 1px;
   -fx-background-radius: 10px;
-  -fx-padding: 6 10 6 10;
-  -fx-text-fill: #000000;
+  -fx-text-fill: #5a1f1f;
 }
 
 /* Alignments */
@@ -27,13 +74,40 @@
   -fx-alignment: CENTER_LEFT;
 }
 
-/* Image sizing */
+/* Image sizing and style */
 .image-view {
-  -fx-fit-width: 48px;
-  -fx-fit-height: 48px;
+  -fx-fit-width: 32px;
+  -fx-fit-height: 32px;
+  -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.08), 2, 0.0, 0, 1);
+  -fx-background-radius: 50%;
+  -fx-border-radius: 50%;
 }
 
-/* ScrollPane background */
-.root {
-  -fx-background-color: #ffffff;
+/* TextFlow (dialogFlow) specific styling - apply rounded background via .dialog-label selectors above */
+.text-flow.dialog-label {
+  -fx-text-fill: #0C0F25; /* default text color if needed */
+}
+
+/* Dialog container spacing tweaks */
+#dialogContainer {
+  -fx-padding: 8 6 8 6;
+}
+
+/* Input area */
+.text-field {
+  -fx-font-size: 13px;
+}
+
+.button {
+  -fx-font-size: 13px;
+}
+
+/* Make scrollpane content use available width */
+.scroll-pane > .viewport {
+  -fx-background-color: transparent;
+}
+
+/* Small helper for compact dialog-labels */
+.dialog-label {
+  -fx-wrap-text: true;
 }
