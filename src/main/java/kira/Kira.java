@@ -92,12 +92,12 @@ public class Kira {
             // If the command is undo, handle it here by popping the stack
             if (c instanceof UndoCommand) {
                 if (undoStack.isEmpty()) {
-                    ui.showError("Nothing to undo.");
+                    ui.showError("Ermm there's nothing to undo!");
                 } else {
                     TaskList previous = undoStack.pop();
                     tasks.replaceWith(previous);
                     storage.save(tasks);
-                    ui.showMessage("Okay, undone last action.");
+                    ui.showMessage("Okay, got it, you regret it. Last action UNDONE!");
                 }
             } else {
                 // For other commands, snapshot if undoable

@@ -15,6 +15,26 @@ repositories {
 }
 
 dependencies {
+    // Pin a JavaFX version and add explicit platform-specific natives so the fat JAR
+    // contains Windows, macOS and Linux JavaFX native artifacts (fixes runtime on Windows).
+    def javaFxVersion = '17.0.7'
+
+    implementation "org.openjfx:javafx-base:${javaFxVersion}:win"
+    implementation "org.openjfx:javafx-base:${javaFxVersion}:mac"
+    implementation "org.openjfx:javafx-base:${javaFxVersion}:linux"
+
+    implementation "org.openjfx:javafx-controls:${javaFxVersion}:win"
+    implementation "org.openjfx:javafx-controls:${javaFxVersion}:mac"
+    implementation "org.openjfx:javafx-controls:${javaFxVersion}:linux"
+
+    implementation "org.openjfx:javafx-fxml:${javaFxVersion}:win"
+    implementation "org.openjfx:javafx-fxml:${javaFxVersion}:mac"
+    implementation "org.openjfx:javafx-fxml:${javaFxVersion}:linux"
+
+    implementation "org.openjfx:javafx-graphics:${javaFxVersion}:win"
+    implementation "org.openjfx:javafx-graphics:${javaFxVersion}:mac"
+    implementation "org.openjfx:javafx-graphics:${javaFxVersion}:linux"
+
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
 }
@@ -45,6 +65,15 @@ javafx {
 shadowJar {
     archiveBaseName.set("kira")
     archiveClassifier.set("")
+    // Merge service descriptors and other files that may be split across dependencies
+    mergeServiceFiles()
+    // Unpack runtime classpath dependencies (including JavaFX classifier jars) into the shadow JAR.
+    // This helps ensure native libraries and platform-specific resources are available at runtime.
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    // Keep jar signature files out to avoid verification issues
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
 }
 
 run{
