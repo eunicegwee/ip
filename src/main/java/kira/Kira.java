@@ -144,7 +144,7 @@ public class Kira {
      */
     public List<String> getSupportedCommands() {
         List<String> cmds = new ArrayList<>();
-        cmds.add("Supported commands:");
+        cmds.add("Here's what I can do! These are my supported commands:");
         cmds.add("  todo <description>");
         cmds.add("  deadline <description> /by <yyyy-MM-dd HH:mm>");
         cmds.add("  event <description> /from <yyyy-MM-dd HH:mm> /to <yyyy-MM-dd HH:mm>");

@@ -90,13 +90,16 @@ public class KiraResponder {
             java.util.List<String> result = new java.util.ArrayList<>();
             if (welcomeMsgs != null && !welcomeMsgs.isEmpty()) {
                 // keep first welcome messages as separate entries
-                result.addAll(welcomeMsgs);
+                for (String wm : welcomeMsgs) {
+                    result.add(wm);
+                }
             }
             result.add(joiner.toString());
             return new CommandResult(result, false);
         }
         return new CommandResult(false, " Hello! I'm Kira.", "Supported commands: ...");
     }
+
 }
 
 // End of KiraResponder.java

@@ -88,7 +88,6 @@ public class DialogBox extends HBox {
         }
         // Very simple parser that supports <b>, <i>, <u>, and <color=#rrggbb>...</color>
         // This is not a full HTML parser; it's a pragmatic lightweight approach for the UI.
-        int idx = 0;
         Deque<String> tagStack = new ArrayDeque<>();
         StringTokenizer st = new StringTokenizer(text, "<>", true);
         boolean inTag = false;
@@ -110,14 +109,23 @@ public class DialogBox extends HBox {
             }
             if (inTag) {
                 String tag = tok.trim();
-                if (tag.startsWith("/")) {
-                    // closing tag
-                    if (!tagStack.isEmpty()) {
-                        tagStack.pop();
+                boolean isClosing = tag.startsWith("/");
+                String bare = isClosing ? tag.substring(1).trim() : tag;
+                if (isFormattingTag(bare)) {
+                    if (isClosing) {
+                        if (!tagStack.isEmpty()) {
+                            tagStack.pop();
+                        }
+                    } else {
+                        tagStack.push(bare);
                     }
                 } else {
-                    // opening tag
-                    tagStack.push(tag);
+                    // Unknown tag: treat it as literal text (show the angle brackets and content)
+                    if (isClosing) {
+                        pending += "</" + bare + ">";
+                    } else {
+                        pending += "<" + bare + ">";
+                    }
                 }
             } else {
                 pending += tok;
@@ -126,6 +134,23 @@ public class DialogBox extends HBox {
         if (!pending.isEmpty()) {
             dialogFlow.getChildren().add(makeTextNode(pending, tagStack));
         }
+    }
+
+    /**
+     * Returns true if the token corresponds to a supported formatting tag.
+     */
+    private boolean isFormattingTag(String tag) {
+        if (tag == null || tag.isEmpty()) {
+            return false;
+        }
+        String lower = tag.toLowerCase();
+        if (lower.equals("b") || lower.equals("i") || lower.equals("u")) {
+            return true;
+        }
+        if (lower.startsWith("color=")) {
+            return true;
+        }
+        return false;
     }
 
     private Text makeTextNode(String content, Deque<String> tagStack) {
