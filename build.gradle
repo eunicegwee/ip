@@ -3,7 +3,6 @@ plugins {
     id 'application'
     id 'checkstyle'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
-    id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 checkstyle {
@@ -57,11 +56,6 @@ application {
     mainClass.set("kira.Launcher")
 }
 
-javafx {
-    version = "17"
-    modules = [ 'javafx.controls', 'javafx.fxml' ]
-}
-
 shadowJar {
     archiveBaseName.set("kira")
     archiveClassifier.set("")
@@ -69,9 +63,6 @@ shadowJar {
     mergeServiceFiles()
     // Unpack runtime classpath dependencies (including JavaFX classifier jars) into the shadow JAR.
     // This helps ensure native libraries and platform-specific resources are available at runtime.
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
     // Keep jar signature files out to avoid verification issues
     exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
 }
