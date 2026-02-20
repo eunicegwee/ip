@@ -19,7 +19,7 @@ public class TaskList {
     /**
      * Constructs a TaskList wrapping an existing list of tasks.
      *
-     * @param tasks existing tasks to wrap (must not be null)
+     * @param tasks existing tasks to wrap (must not be null).
      */
     public TaskList(ArrayList<Task> tasks) {
         assert tasks != null : "tasks parameter must not be null";
@@ -29,7 +29,7 @@ public class TaskList {
     /**
      * Adds a task to the list.
      *
-     * @param t the task to add (must not be null)
+     * @param t the task to add (must not be null).
      */
     public void add(Task t) {
         assert t != null : "task to add must not be null";
@@ -39,8 +39,8 @@ public class TaskList {
     /**
      * Deletes the task at the given index and returns it.
      *
-     * @param index index of the task to delete (0-based)
-     * @return the removed task
+     * @param index index of the task to delete (0-based).
+     * @return the removed task.
      */
     public Task delete(int index) {
         assert index >= 0 && index < tasks.size() : "delete index out of bounds";
@@ -50,8 +50,8 @@ public class TaskList {
     /**
      * Returns the task at the given index.
      *
-     * @param index index of the task to retrieve (0-based)
-     * @return the task at the index
+     * @param index index of the task to retrieve (0-based).
+     * @return the task at the index.
      */
     public Task get(int index) {
         assert index >= 0 && index < tasks.size() : "get index out of bounds";
@@ -68,7 +68,9 @@ public class TaskList {
     }
 
     /**
-     * Create a deep copy of this TaskList (tasks are copied via Task.copy()).
+     * Creates a deep copy of this TaskList (tasks are copied via Task.copy()).
+     *
+     * @return a new TaskList containing deep copies of tasks.
      */
     public TaskList copy() {
         ArrayList<Task> newList = new ArrayList<>();
@@ -79,8 +81,10 @@ public class TaskList {
     }
 
     /**
-     * Replace this TaskList's contents with another TaskList's contents.
+     * Replaces this TaskList's contents with another TaskList's contents.
      * The receiver's internal list will be cleared and filled with copies of the other's tasks.
+     *
+     * @param other TaskList providing the replacement contents (must not be null).
      */
     public void replaceWith(TaskList other) {
         assert other != null : "other must not be null";

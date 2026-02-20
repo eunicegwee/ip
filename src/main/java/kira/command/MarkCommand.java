@@ -15,8 +15,9 @@ public class MarkCommand extends Command {
 
     /**
      * Creates a new MarkCommand.
-     * @param index index of task to mark/unmark
-     * @param isDone true to mark, false to unmark
+     *
+     * @param index index of task to mark/unmark.
+     * @param isDone true to mark, false to unmark.
      */
     public MarkCommand(int index, boolean isDone) {
         this.index = index;

@@ -15,8 +15,9 @@ import kira.CommandResult;
 import kira.ResponseUi;
 
 /**
- * Controller for the main GUI. Responsible for wiring user actions to backend calls and
- * managing the dialog container UI.
+ * Controls the main GUI and wires user actions to backend calls.
+ *
+ * Manages the dialog container UI and message presentation.
  */
 public class MainWindow extends AnchorPane {
     @FXML
@@ -47,9 +48,10 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
-     * Initializes the controller. Binds the scroll pane to the dialog container height so it
-     * automatically scrolls to the bottom when new messages are added and adjusts dialog wrap
-     * widths when the window is resized.
+     * Initializes the controller.
+     *
+     * Binds the scroll pane to the dialog container height so new messages automatically
+     * scroll into view and adjusts dialog wrap widths when the window is resized.
      */
     @FXML
     public void initialize() {
@@ -91,11 +93,11 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
-     * Injects the KiraResponder instance and displays the welcome message along with a
-     * commands list. This method is called by the application after FXML loading to provide
-     * a backend-adapter for the controller to use.
+     * Injects the KiraResponder instance.
      *
-     * @param k the KiraResponder to use for backend replies
+     * Displays the welcome message and initial backend-provided commands list if available.
+     *
+     * @param k the KiraResponder to use for backend replies.
      */
     public void setKiraResponder(KiraResponder k) {
         this.kiraResponder = k;
@@ -132,9 +134,10 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
-     * Handles the user input event (Send button click or Enter key). It appends the user's
-     * message to the dialog container immediately, calls the backend asynchronously, and
-     * appends Kira's single joined response when available.
+     * Handles the user input event (Send button click or Enter key).
+     *
+     * Adds the user's message to the dialog container, calls the backend asynchronously,
+     * and appends Kira's joined response when available.
      */
     @FXML
     private void handleUserInput() {
@@ -144,80 +147,112 @@ public class MainWindow extends AnchorPane {
         }
 
         // Add user dialog immediately on UI thread
+        DialogBox userBox = createUserDialog(input);
+        dialogContainer.getChildren().addAll(userBox);
+        userInput.clear();
+
+        // Run backend processing in background
+        Task<CommandResult> task = createBackendTask(input);
+
+        task.setOnSucceeded(evt -> onTaskSucceeded(task.getValue()));
+
+        task.setOnFailed(evt -> onTaskFailed(task.getException()));
+
+        new Thread(task).start();
+    }
+
+    /**
+     * Creates a DialogBox for the user's message and sets appropriate widths.
+     *
+     * @param input the user's input text.
+     * @return a configured DialogBox instance for the user message.
+     */
+    private DialogBox createUserDialog(String input) {
         DialogBox userBox = DialogBox.getUserDialog(input, userImage);
-        // Set wrap width for newly created user box based on viewport width (compact)
         double viewportWidth = scrollPane.getViewportBounds().getWidth();
         double availInit = Math.max(120, viewportWidth - 110);
         double userInitWidth = Math.max(120, Math.min(600, availInit * 0.45));
         userBox.setDialogWrapWidth(userInitWidth);
         userBox.setMaxWidth(viewportWidth);
         userBox.setPrefWidth(viewportWidth);
-        dialogContainer.getChildren().addAll(userBox);
-        userInput.clear();
+        return userBox;
+    }
 
-        // Run backend processing in background
-        Task<CommandResult> task = new Task<>() {
+    /**
+     * Creates a background Task that calls the backend responder.
+     *
+     * @param input the user input to send to the backend.
+     * @return a Task that will execute the backend command.
+     */
+    private Task<CommandResult> createBackendTask(String input) {
+        return new Task<>() {
             @Override
             protected CommandResult call() {
                 return (kiraResponder != null) ? kiraResponder.executeCommand(input)
                         : new CommandResult(false, "Kira heard: " + input);
             }
         };
+    }
 
-        task.setOnSucceeded(evt -> {
-            CommandResult result = task.getValue();
-            java.util.List<String> msgs = result.getMessages();
-            if (msgs != null && !msgs.isEmpty()) {
-                // Combine all returned lines into a single bubble for standard responses
-                StringJoiner joiner = new StringJoiner(System.lineSeparator());
-                boolean anyError = false;
-                for (String line : msgs) {
-                    if (line != null && line.startsWith(ResponseUi.ERROR_PREFIX)) {
-                        anyError = true;
-                        joiner.add(line.substring(ResponseUi.ERROR_PREFIX.length()));
-                    } else {
-                        joiner.add(line);
-                    }
-                }
-                String combined = joiner.toString();
-                DialogBox kiraBox;
-                if (anyError) {
-                    kiraBox = DialogBox.getKiraErrorDialog(combined, kiraImage);
+    /**
+     * Processes a successful backend result.
+     *
+     * Combines message lines into a single display string, creates the Kira dialog, and
+     * handles application exit if requested by the result.
+     *
+     * @param result the CommandResult produced by the backend.
+     */
+    private void onTaskSucceeded(CommandResult result) {
+        java.util.List<String> msgs = result.getMessages();
+        if (msgs != null && !msgs.isEmpty()) {
+            StringJoiner joiner = new StringJoiner(System.lineSeparator());
+            boolean anyError = false;
+            for (String line : msgs) {
+                if (line != null && line.startsWith(ResponseUi.ERROR_PREFIX)) {
+                    anyError = true;
+                    joiner.add(line.substring(ResponseUi.ERROR_PREFIX.length()));
                 } else {
-                    kiraBox = DialogBox.getKiraDialog(combined, kiraImage);
+                    joiner.add(line);
                 }
-                double vpw = scrollPane.getViewportBounds().getWidth();
-                double availResp = Math.max(120, vpw - 110);
-                // Kira responses should take advantage of available width
-                kiraBox.setDialogWrapWidth(availResp);
-                kiraBox.setMaxWidth(vpw);
-                kiraBox.setPrefWidth(vpw);
-                dialogContainer.getChildren().addAll(kiraBox);
             }
-            if (result.isExit()) {
-                // close the application after a short delay to allow user to see message
-                Platform.runLater(() -> {
-                    try {
-                        Thread.sleep(250);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
-                    Platform.exit();
-                });
+            String combined = joiner.toString();
+            DialogBox kiraBox;
+            if (anyError) {
+                kiraBox = DialogBox.getKiraErrorDialog(combined, kiraImage);
+            } else {
+                kiraBox = DialogBox.getKiraDialog(combined, kiraImage);
             }
-        });
+            double vpw = scrollPane.getViewportBounds().getWidth();
+            double availResp = Math.max(120, vpw - 110);
+            kiraBox.setDialogWrapWidth(availResp);
+            kiraBox.setMaxWidth(vpw);
+            kiraBox.setPrefWidth(vpw);
+            dialogContainer.getChildren().addAll(kiraBox);
+        }
+        if (result.isExit()) {
+            Platform.runLater(() -> {
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                Platform.exit();
+            });
+        }
+    }
 
-        task.setOnFailed(evt -> {
-            Throwable ex = task.getException();
-            DialogBox err = DialogBox.getKiraErrorDialog("An error occurred: "
-                    + (ex != null ? ex.getMessage() : "unknown"), kiraImage);
-            double vp = scrollPane.getViewportBounds().getWidth();
-            err.setDialogWrapWidth(Math.max(120, vp - 110));
-            err.setMaxWidth(vp);
-            dialogContainer.getChildren().addAll(err);
-        });
-
-        new Thread(task).start();
+    /**
+     * Processes a failed backend task and shows an error dialog.
+     *
+     * @param ex the exception that occurred, may be null.
+     */
+    private void onTaskFailed(Throwable ex) {
+        DialogBox err = DialogBox.getKiraErrorDialog("An error occurred: "
+                + (ex != null ? ex.getMessage() : "unknown"), kiraImage);
+        double vp = scrollPane.getViewportBounds().getWidth();
+        err.setDialogWrapWidth(Math.max(120, vp - 110));
+        err.setMaxWidth(vp);
+        dialogContainer.getChildren().addAll(err);
     }
 }
 

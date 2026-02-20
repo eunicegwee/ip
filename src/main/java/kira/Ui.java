@@ -19,6 +19,7 @@ public class Ui {
 
     /**
      * Reads the next line of input from the user.
+     *
      * @return The user's full command string.
      */
     public String readCommand() {
@@ -54,6 +55,7 @@ public class Ui {
 
     /**
      * Displays an error message to the user.
+     *
      * @param message The error message to display.
      */
     public void showError(String message) {
@@ -69,6 +71,7 @@ public class Ui {
 
     /**
      * Displays a generic message to the user.
+     *
      * @param message The message to display.
      */
     public void showMessage(String message) {
@@ -76,7 +79,8 @@ public class Ui {
     }
 
     /**
-     * Close any resources used by Ui (scanner).
+     * Closes any resources used by Ui (scanner).
+     *
      * No-op for subclasses that do not use System.in.
      */
     public void close() {

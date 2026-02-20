@@ -23,6 +23,7 @@ public class Kira {
 
     /**
      * Constructs a new Kira instance using the console UI.
+     *
      * @param filePath The file path where tasks are stored and retrieved.
      */
     public Kira(String filePath) {
@@ -44,8 +45,9 @@ public class Kira {
 
     /**
      * Constructs a new Kira instance with a supplied Ui implementation (useful for GUI testing).
-     * @param filePath location of storage file
-     * @param ui the Ui implementation to receive output (e.g., ResponseUi for GUI)
+     *
+     * @param filePath location of storage file.
+     * @param ui the Ui implementation to receive output (e.g., ResponseUi for GUI).
      */
     public Kira(String filePath, Ui ui) {
         // Preconditions: both filePath and ui should not be null
@@ -72,8 +74,8 @@ public class Kira {
      * command execution. The returned {@link CommandResult} contains the captured lines as
      * a list and a boolean indicating whether the executed command triggers application exit.
      *
-     * @param input the raw user command
-     * @return a {@link CommandResult} with message lines and exit flag
+     * @param input the raw user command.
+     * @return a {@link CommandResult} with message lines and exit flag.
      */
     public CommandResult handleCommand(String input) {
         // Preconditions
@@ -124,7 +126,7 @@ public class Kira {
      * <p>This method is intended for GUI usage: it invokes the Ui welcome routine and
      * returns any messages produced as a {@link CommandResult} (messages list, no exit).
      *
-     * @return welcome messages as a {@link CommandResult}
+     * @return welcome messages as a {@link CommandResult}.
      */
     public CommandResult handleWelcome() {
         assert ui != null : "ui must be non-null";
@@ -140,7 +142,7 @@ public class Kira {
     /**
      * Returns a list of supported command descriptions suitable for display in the GUI.
      *
-     * @return list of short help lines describing supported commands
+     * @return list of short help lines describing supported commands.
      */
     public List<String> getSupportedCommands() {
         List<String> cmds = new ArrayList<>();
@@ -211,6 +213,7 @@ public class Kira {
 
     /**
      * The main method that starts the application.
+     *
      * @param args Command line arguments (not used).
      */
     public static void main(String[] args) {

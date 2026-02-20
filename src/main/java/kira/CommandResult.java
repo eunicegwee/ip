@@ -14,8 +14,8 @@ public class CommandResult {
     /**
      * Constructs a CommandResult containing the backend messages and an exit flag.
      *
-     * @param messages the list of message lines produced by the backend
-     * @param isExit whether this command indicates the application should exit
+     * @param messages the list of message lines produced by the backend.
+     * @param isExit whether this command indicates the application should exit.
      */
     public CommandResult(List<String> messages, boolean isExit) {
         assert messages != null : "messages must not be null";
@@ -26,8 +26,8 @@ public class CommandResult {
     /**
      * Convenience constructor allowing creation from varargs of message strings.
      *
-     * @param isExit whether this command indicates the application should exit
-     * @param messages message lines to include in the result
+     * @param isExit whether this command indicates the application should exit.
+     * @param messages message lines to include in the result.
      */
     public CommandResult(boolean isExit, String... messages) {
         this.messages = new ArrayList<>();

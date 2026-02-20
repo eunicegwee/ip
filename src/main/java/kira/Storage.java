@@ -48,42 +48,11 @@ public class Storage {
             throw new KiraException("No data file found.");
         }
 
-        try {
-            Scanner s = new Scanner(file);
-            while (s.hasNext()) {
+        try (Scanner s = new Scanner(file)) {
+            while (s.hasNextLine()) {
                 String line = s.nextLine();
-                String[] parts = line.split(SEP); // Split by " | "
-
-                if (parts.length < 3) {
-                    throw new KiraException("Corrupted data line: " + line);
-                }
-
-                String type = parts[0];
-                boolean isDone = parts[1].equals("1");
-                String description = parts[2];
-
-                Task task = null;
-                // Use if/else instead of switch to satisfy indentation rules
-                if ("T".equals(type)) {
-                    task = new ToDo(description);
-                } else if ("D".equals(type)) {
-                    if (parts.length < 4) {
-                        throw new KiraException("Corrupted deadline line: " + line);
-                    }
-                    task = new Deadline(description, parts[3]);
-                } else if ("E".equals(type)) {
-                    if (parts.length < 5) {
-                        throw new KiraException("Corrupted event line: " + line);
-                    }
-                    task = new Event(description, parts[3], parts[4]);
-                } else {
-                    task = null;
-                }
-
+                Task task = parseLine(line);
                 if (task != null) {
-                    if (isDone) {
-                        task.markAsDone();
-                    }
                     tasks.add(task);
                 }
             }
@@ -91,6 +60,52 @@ public class Storage {
             throw new KiraException("Error loading data: " + e.getMessage());
         }
         return tasks;
+    }
+
+    /**
+     * Process a single line from the save file: split, validate, parse and mark done.
+     */
+    private Task parseLine(String line) throws KiraException {
+        String[] parts = line.split(SEP); // Split by " | "
+
+        if (parts.length < 3) {
+            throw new KiraException("Corrupted data line: " + line);
+        }
+
+        Task task = parseParts(parts, line);
+
+        if (task != null) {
+            boolean isDone = parts[1].equals("1");
+            if (isDone) {
+                task.markAsDone();
+            }
+        }
+        return task;
+    }
+
+    /**
+     * Parse the splitted line parts and return a Task instance or null.
+     * Throws KiraException for corrupted lines specific to task types.
+     */
+    private Task parseParts(String[] parts, String line) throws KiraException {
+        String type = parts[0];
+        String description = parts[2];
+
+        if ("T".equals(type)) {
+            return new ToDo(description);
+        } else if ("D".equals(type)) {
+            if (parts.length < 4) {
+                throw new KiraException("Corrupted deadline line: " + line);
+            }
+            return new Deadline(description, parts[3]);
+        } else if ("E".equals(type)) {
+            if (parts.length < 5) {
+                throw new KiraException("Corrupted event line: " + line);
+            }
+            return new Event(description, parts[3], parts[4]);
+        } else {
+            return null;
+        }
     }
 
     /**

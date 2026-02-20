@@ -17,9 +17,9 @@ public class Event extends Task {
     /**
      * Constructs an Event with the given description, start and end datetimes.
      *
-     * @param description event description
-     * @param from start datetime in format yyyy-MM-dd HH:mm
-     * @param to end datetime in format yyyy-MM-dd HH:mm
+     * @param description event description.
+     * @param from start datetime in format yyyy-MM-dd HH:mm.
+     * @param to end datetime in format yyyy-MM-dd HH:mm.
      */
     public Event(String description, String from, String to) {
         super(description);

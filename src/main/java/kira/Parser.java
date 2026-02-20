@@ -34,35 +34,36 @@ public class Parser {
         String[] parts = fullCommand.split(" ", 2); // Split command word and arguments
         String commandWord = parts[0].toLowerCase();
 
-        if (commandWord.equals("bye")) {
+        switch (commandWord) {
+        case "bye":
             return new ExitCommand();
-        } else if (commandWord.equals("list")) {
+        case "list":
             return new ListCommand();
-        } else if (commandWord.equals("undo")) {
+        case "undo":
             return new UndoCommand();
-        } else if (commandWord.equals("mark")) {
+        case "mark":
             return new MarkCommand(parseIndex(parts), true);
-        } else if (commandWord.equals("unmark")) {
+        case "unmark":
             return new MarkCommand(parseIndex(parts), false);
-        } else if (commandWord.equals("delete")) {
+        case "delete":
             return new DeleteCommand(parseIndex(parts));
-        } else if (commandWord.equals("find")) {
+        case "find":
             if (parts.length < 2) {
                 throw new KiraException("OOPS! Please specify a search keyword.");
             }
             return new FindCommand(parts[1]);
-        } else if (commandWord.equals("todo")) {
+        case "todo":
             if (parts.length < 2) {
                 throw new KiraException("OOPS! The description of a todo cannot be empty.");
             }
             return new AddCommand(new ToDo(parts[1]));
-        } else if (commandWord.equals("deadline")) {
+        case "deadline":
             return prepareDeadline(parts);
-        } else if (commandWord.equals("event")) {
+        case "event":
             return prepareEvent(parts);
-        } else if (commandWord.equals("filter")) {
+        case "filter":
             return prepareFilter(parts);
-        } else {
+        default:
             throw new KiraException("OOPS! I'm sorry, but I don't know what that means :-(");
         }
     }
