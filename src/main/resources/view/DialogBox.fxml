@@ -4,6 +4,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
 <fx:root alignment="TOP_RIGHT"
@@ -16,7 +17,12 @@
   <children>
     <Region fx:id="spacer" />
     <TextFlow fx:id="dialogFlow" />
-    <ImageView fx:id="displayPicture" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" />
+    <!-- Wrap the avatar in a VBox so it can be bottom-aligned relative to the TextFlow -->
+    <VBox alignment="BOTTOM_CENTER">
+      <children>
+        <ImageView fx:id="displayPicture" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" />
+      </children>
+    </VBox>
   </children>
   <padding>
     <Insets bottom="8.0" left="6.0" right="6.0" top="8.0" />

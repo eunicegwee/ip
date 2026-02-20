@@ -31,6 +31,14 @@ public class Main extends Application {
 
             stage.setTitle("Kira");
             stage.setResizable(true);
+
+            // Set a larger default window size and sensible minimums so the UI has room
+            stage.setWidth(900); // default width on first launch
+            stage.setHeight(780); // default height on first launch
+            stage.setMinWidth(900);
+            stage.setMinHeight(600);
+            stage.centerOnScreen();
+
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

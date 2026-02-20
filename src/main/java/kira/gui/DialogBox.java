@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.StringTokenizer;
 
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
@@ -51,16 +54,28 @@ public class DialogBox extends HBox {
 
         displayPicture.setImage(img);
 
-        // Apply a circular clip to make avatar round (if image present)
+        // Make sure the ImageView uses the expected style class so CSS sizing rules apply
+        displayPicture.getStyleClass().add("image-view");
+        displayPicture.setPreserveRatio(true);
+        displayPicture.setSmooth(true);
+
+        // Apply a circular clip to make avatar round (if image present) and keep it centered
         if (displayPicture != null) {
-            double radius = Math.min(displayPicture.getFitWidth(), displayPicture.getFitHeight()) / 2.0;
-            Circle clip = new Circle(radius, radius, radius);
+            Circle clip = new Circle();
+            // Bind to fitWidth/fitHeight so the clip stays centered and scales with the ImageView
+            clip.centerXProperty().bind(displayPicture.fitWidthProperty().divide(2.0));
+            clip.centerYProperty().bind(displayPicture.fitHeightProperty().divide(2.0));
+            clip.radiusProperty().bind(
+                    Bindings.min(displayPicture.fitWidthProperty(), displayPicture.fitHeightProperty()).divide(2.0)
+            );
             displayPicture.setClip(clip);
         }
 
         // Prevent TextFlow from showing focus/selection outline
         if (dialogFlow != null) {
             dialogFlow.setFocusTraversable(false);
+            // Ensure consistent line spacing for readability
+            dialogFlow.setLineSpacing(4.0);
             // Allow the TextFlow to grow horizontally so it fills available width
             HBox.setHgrow(dialogFlow, Priority.ALWAYS);
             dialogFlow.setMaxWidth(Double.MAX_VALUE);
@@ -156,7 +171,8 @@ public class DialogBox extends HBox {
     private Text makeTextNode(String content, Deque<String> tagStack) {
         Text t = new Text(content);
         // default font
-        double size = 13.0;
+        double size = 14.0; // slightly larger for readability
+        String family = "Inter"; // preferred nicer font, falls back to system fonts via CSS
         boolean bold = false;
         boolean italic = false;
         boolean underline = false;
@@ -180,7 +196,7 @@ public class DialogBox extends HBox {
         }
         FontWeight fw = bold ? FontWeight.BOLD : FontWeight.NORMAL;
         FontPosture fp = italic ? FontPosture.ITALIC : FontPosture.REGULAR;
-        t.setFont(Font.font("System", fw, fp, size));
+        t.setFont(Font.font(family, fw, fp, size));
         t.setUnderline(underline);
         if (color != null && color.startsWith("#") && color.length() == 7) {
             t.setStyle("-fx-fill: " + color + ";");
@@ -231,6 +247,19 @@ public class DialogBox extends HBox {
                     tnode.setWrappingWidth(wrapForText);
                 }
             }
+
+            // Force a layout pass on the JavaFX thread so the TextFlow recomputes its height
+            Platform.runLater(() -> {
+                // Reapply CSS/layout to ensure wrapping changes take effect immediately
+                dialogFlow.applyCss();
+                dialogFlow.layout();
+                // Ensure the parent containers re-layout as well
+                if (this.getParent() instanceof javafx.scene.Parent) {
+                    javafx.scene.Parent parent = (javafx.scene.Parent) this.getParent();
+                    parent.requestLayout();
+                }
+                this.requestLayout();
+            });
         }
     }
 
@@ -258,7 +287,14 @@ public class DialogBox extends HBox {
         // Use spacer + rightContainer so the rightContainer (bubble+avatar) is pinned to the right
         db.getChildren().setAll(db.spacer, db.rightContainer);
         // order inside rightContainer: bubble then avatar
-        db.rightContainer.getChildren().setAll(db.dialogFlow, db.displayPicture);
+        // Wrap avatar in a VBox so it can be bottom-aligned relative to the dialogFlow
+        VBox avatarBoxUser = new VBox(db.displayPicture);
+        avatarBoxUser.setAlignment(Pos.BOTTOM_CENTER);
+        // bind the avatar box height to the dialogFlow height so avatar sits at bubble bottom
+        if (db.dialogFlow != null) {
+            avatarBoxUser.prefHeightProperty().bind(db.dialogFlow.heightProperty());
+        }
+        db.rightContainer.getChildren().setAll(db.dialogFlow, avatarBoxUser);
         // Keep rightContainer alignment consistent
         db.rightContainer.setAlignment(Pos.CENTER_RIGHT);
         return db;
@@ -285,7 +321,13 @@ public class DialogBox extends HBox {
         HBox.setHgrow(db, Priority.ALWAYS);
         db.setMaxWidth(Double.MAX_VALUE);
         // For Kira put the rightContainer first and spacer after it so the group sits at the left
-        db.rightContainer.getChildren().setAll(db.displayPicture, db.dialogFlow);
+        // Wrap avatar in a VBox so it can be bottom-aligned relative to the dialogFlow
+        VBox avatarBoxKira = new VBox(db.displayPicture);
+        avatarBoxKira.setAlignment(Pos.BOTTOM_CENTER);
+        if (db.dialogFlow != null) {
+            avatarBoxKira.prefHeightProperty().bind(db.dialogFlow.heightProperty());
+        }
+        db.rightContainer.getChildren().setAll(avatarBoxKira, db.dialogFlow);
         // ensure the rightContainer doesn't grow; spacer should take remaining space
         HBox.setHgrow(db.rightContainer, Priority.NEVER);
         db.getChildren().setAll(db.rightContainer, db.spacer);
@@ -312,7 +354,12 @@ public class DialogBox extends HBox {
         // allow the DialogBox to expand horizontally in the dialog container
         HBox.setHgrow(db, Priority.ALWAYS);
         db.setMaxWidth(Double.MAX_VALUE);
-        db.rightContainer.getChildren().setAll(db.displayPicture, db.dialogFlow);
+        VBox avatarBoxErr = new VBox(db.displayPicture);
+        avatarBoxErr.setAlignment(Pos.BOTTOM_CENTER);
+        if (db.dialogFlow != null) {
+            avatarBoxErr.prefHeightProperty().bind(db.dialogFlow.heightProperty());
+        }
+        db.rightContainer.getChildren().setAll(avatarBoxErr, db.dialogFlow);
         HBox.setHgrow(db.rightContainer, Priority.NEVER);
         db.getChildren().setAll(db.rightContainer, db.spacer);
         return db;
